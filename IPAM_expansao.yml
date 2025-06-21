@@ -1,0 +1,30 @@
+- name: Create VRF
+  hosts: localhost
+  gather_facts: false
+
+  vars_files:
+    - "netbox.yml"
+
+  tasks:
+    - name: Vreate VRFs
+      set_fact:
+        Address:
+          - address: 172.20.30.25/24
+            name: clab-teste-Spine3
+          - address: 172.20.30.26/24
+            name: clab-teste-leaf3
+
+    - name: Create IP address
+      netbox.netbox.netbox_ip_address:
+        netbox_url: "{{ netbox_url }}"
+        netbox_token: "{{ netbox_token }}"
+        data:
+          address: "{{ item.address}}"
+          vrf: default
+          role: Loopback
+          tags: "leetc"
+          assigned_object:
+            name: system0.0
+            device: "{{ item.name }}"
+        state: present
+      loop: "{{ Address }}"
