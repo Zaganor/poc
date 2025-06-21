@@ -1,0 +1,111 @@
+name: teste
+
+topology:
+  nodes:
+    leaf1:
+      kind: nokia_srlinux
+      type: ixrd2l
+      image: ghcr.io/nokia/srlinux
+      labels:
+        graph-posX: "585"
+        graph-posY: "305"
+        graph-groupLabelPos: bottom-center
+        graph-group: groupName13
+        graph-level: "1"
+    leaf2:
+      kind: nokia_srlinux
+      type: ixrd2l
+      image: ghcr.io/nokia/srlinux
+      labels:
+        graph-posX: "695"
+        graph-posY: "295"
+        graph-groupLabelPos: bottom-center
+        graph-group: groupName14
+        graph-level: "1"
+    leaf3:
+      kind: nokia_srlinux
+      type: ixrd2l
+      image: ghcr.io/nokia/srlinux
+      labels:
+        graph-posX: "815"
+        graph-posY: "305"
+        graph-groupLabelPos: top-left
+        graph-group: Data Center Leafs
+        graph-level: "1"
+    Spine1:
+      kind: nokia_srlinux
+      type: ixrd3l
+      image: ghcr.io/nokia/srlinux
+      labels:
+        graph-posX: "630"
+        graph-posY: "220"
+        graph-groupLabelPos: top-center
+        graph-group: Data Center Spine
+        graph-level: "1"
+    Spine2:
+      kind: nokia_srlinux
+      type: ixrd3l
+      image: ghcr.io/nokia/srlinux
+      labels:
+        graph-posX: "710"
+        graph-posY: "220"
+        graph-groupLabelPos: top-center
+        graph-group: Data Center Spine
+        graph-level: "1"
+    Host1:
+      kind: linux
+      image: ghcr.io/hellt/network-multitool
+      binds:
+        - ./eth1.sh:/tmp/eth1.sh
+      exec:
+        - bash /tmp/eth1.sh
+        - ip addr add 192.168.1.21/24 dev bond0.10
+      labels:
+        graph-posX: "535"
+        graph-posY: "395"
+        graph-groupLabelPos: bottom-center
+    Host2:
+      kind: linux
+      image: ghcr.io/hellt/network-multitool
+      binds:
+        - ./eth1.sh:/tmp/eth1.sh
+      exec:
+        - bash /tmp/eth1.sh
+        - ip addr add 192.168.1.22/24 dev bond0.10
+      labels:
+        graph-posX: "615"
+        graph-posY: "395"
+        graph-groupLabelPos: bottom-center
+    Host3:
+      kind: linux
+      image: ghcr.io/hellt/network-multitool
+      binds:
+        - ./eth1.sh:/tmp/eth1.sh
+      exec:
+        - bash /tmp/eth1.sh
+        - ip addr add 192.168.1.23/24 dev bond0.10
+      labels:
+        graph-posX: "695"
+        graph-posY: "405"
+        graph-groupLabelPos: bottom-center
+    Host4:
+      kind: linux
+      image: ghcr.io/hellt/network-multitool
+      binds:
+        - ./eth1.sh:/tmp/eth1.sh
+      labels:
+        graph-posX: "825"
+        graph-posY: "405"
+        graph-groupLabelPos: bottom-center
+
+  links:
+    - endpoints: [ "Spine1:e1-1", "leaf1:e1-1" ]
+    - endpoints: [ "Spine1:e1-2", "leaf2:e1-1" ]
+    - endpoints: [ "Spine2:e1-1", "leaf1:e1-2" ]
+    - endpoints: [ "Spine2:e1-2", "leaf2:e1-2" ]
+    - endpoints: [ "leaf1:e1-3", "Host1:eth1" ]
+    - endpoints: [ "leaf2:e1-3", "Host3:eth1" ]
+    - endpoints: [ "leaf1:e1-4", "Host2:eth1" ]
+    - endpoints: [ "Spine1:e1-3", "leaf3:e1-1" ]
+    - endpoints: [ "Spine2:e1-3", "leaf3:e1-2" ]
+    - endpoints: [ "leaf3:e1-4", "Host4:eth1" ]
