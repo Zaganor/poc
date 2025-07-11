@@ -1,4 +1,0 @@
-My name is clab-poc-leetc-leaf1
-My name is clab-poc-leetc-leaf2
-My name is clab-poc-leetc-Spine1
-My name is clab-poc-leetc-Spine2
