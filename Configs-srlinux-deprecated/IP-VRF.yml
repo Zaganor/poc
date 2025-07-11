@@ -1,0 +1,77 @@
+- name: IP_VRF Config
+  hosts: device_roles_leaf
+  gather_facts: false
+
+  vars_files:
+    - "netbox.yml"
+    - "leaf_asn.yml"
+
+  tasks:
+
+    - name: VXLAN interface
+      nokia.srlinux.config:
+        update:
+          - path: /tunnel-interface[name=vxlan2]
+            value:
+              vxlan-interface:
+                - index: 11
+                  type: routed
+                  ingress:
+                    vni: 11
+
+
+    - name: IP-VRF
+      nokia.srlinux.config:
+        update:
+          - path: /network-instance[name=ip-vrf-symmetric]
+            value:
+              admin-state: enable
+              type: ip-vrf
+              vxlan-interface:
+                - name: vxlan2.11
+
+    - name: 3 - Get Overlay ASN
+      uri:
+        url: "{{ netbox_url }}api/ipam/asns/?device={{inventory_hostname}}&tag=leetc"
+        method: GET
+        return_content: yes
+        headers:
+          accept: "application/json"
+          Authorization: "Token {{ netbox_token }}"
+      register: ip_addresses
+
+    - name: Extract Overlay ASN
+      set_fact:
+        overlay_asn: >-
+          {{
+            ip_addresses.json.results
+            | selectattr('description', 'equalto', 'ASN do overlay')
+            | map(attribute='asn')
+            | list
+            | first
+          }}
+
+    - name: Generate vars file from extracted ASN
+      delegate_to: localhost
+      template:
+        src: ASN_LEAF.j2
+        dest: "leaf_asn.yml"
+
+    - name: IP-VRF
+      nokia.srlinux.config:
+        update:
+          - path: /network-instance[name=ip-vrf-symmetric]
+            value:
+              protocols:
+                bgp-evpn:
+                  bgp-instance:
+                    id: 1
+                    evi: 11
+                    vxlan-interface: vxlan2.11
+                    ecmp: 2
+                bgp-vpn:
+                  bgp-instance:
+                    id: 1
+                    route-target:
+                      import-rt: "target:{{AS[inventory_hostname]}}:11"
+                      export-rt: "target:{{AS[inventory_hostname]}}:11"

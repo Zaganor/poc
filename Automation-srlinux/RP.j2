@@ -1,0 +1,4 @@
+system:
+{% for host in groups['all'] %}
+  {{ host }}: "{{ hostvars[host].eth1_ip }}"
+{% endfor %}

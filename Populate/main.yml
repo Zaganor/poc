@@ -1,0 +1,9 @@
+# main.yml
+- import_playbook: create_custom_field.yml
+- import_playbook: populate.yml
+- import_playbook: ASN.yml
+- import_playbook: RT.yml
+- import_playbook: devices.yml
+- import_playbook: connections.yml
+- import_playbook: IPAM_expansion.yml
+- import_playbook: interface_host.yml

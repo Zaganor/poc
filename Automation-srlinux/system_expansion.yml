@@ -1,0 +1,128 @@
+- name: Add interfaces
+  hosts: all
+  gather_facts: false
+
+  vars_files:
+    - "vars_ipam_expansion.yml"
+    - "netbox.yml"
+
+  tasks:
+
+    - name: 3 - Get interfaces
+      uri:
+        url: "{{ netbox_url }}api/ipam/ip-addresses/?device={{inventory_hostname}}&tag=leetc"
+        method: GET
+        return_content: yes
+        headers:
+          accept: "application/json"
+          Authorization: "Token {{ netbox_token }}"
+      register: ip_addresses
+
+    - name: Extract interface names
+      set_fact:
+        interfaces_full: >-
+          {{
+            ip_addresses.json.results
+            | selectattr('assigned_object', 'defined')
+            | map(attribute='assigned_object.name')
+            | list
+          }}
+
+    - name: Get connected interfaces from NetBox
+      uri:
+        url: "{{ netbox_url }}/api/dcim/cable-terminations/"
+        method: GET
+        return_content: yes
+        headers:
+          accept: "application/json"
+          Authorization: "Token {{ netbox_token }}"
+      register: nb_interfaces
+
+    - name: Build list of interface configs por host
+      set_fact:
+        interfaces_by_host: >-
+          {{
+            interfaces_by_host | default({}) |
+            combine({
+              item.termination.device.name: (
+                interfaces_by_host[item.termination.device.name] | default([]) +
+                [ item.termination.name ]
+              )
+            }, recursive=True)
+          }}
+      loop: "{{ nb_interfaces.json.results }}"
+      when: item.termination.device is defined
+
+    - name: 3 - Get IP Addresses
+      uri:
+        url: "{{ netbox_url }}api/ipam/ip-addresses/?device={{inventory_hostname}}&tag=leetc"
+        method: GET
+        return_content: yes
+        headers:
+          accept: "application/json"
+          Authorization: "Token {{ netbox_token }}"
+      register: ip_addresses
+
+    - name: Extract IP of specific interface
+      set_fact:
+        eth1_ip: >-
+          {{
+            ip_addresses.json.results
+            | selectattr('assigned_object', 'defined')
+            | selectattr('assigned_object.name', 'equalto', 'system0.0')
+            | map(attribute='address')
+            | list
+            | first
+            | default('')
+          }}
+
+    - template:
+        src: IPAM.j2
+        dest: vars_ipam_expansion.yml
+
+    - name: Add interface
+      nokia.srlinux.config:
+        update:
+          - path: /interface[name=system0]
+            value:
+              admin-state: enable
+              description: "interface description set with Ansible"
+              subinterface:
+                - index: 0
+                  admin-state: enable
+                  description: "subinterface description set with Ansible"
+                  ipv4:
+                    admin-state: enable
+                    address:
+                      - ip-prefix: "{{ system[inventory_hostname] }}"
+
+    - name: Set formatted interfaces
+      set_fact:
+        formatted_interfaces: >-
+          {{
+            [{'name': 'system0.0'}] +
+            interfaces_dynamic[inventory_hostname] | map('trim') | map('community.general.dict_kv', 'name') | list
+          }}
+    
+    - name: Add network instance default
+      nokia.srlinux.config:
+        update:
+          - path: /network-instance[name=default]
+            value:
+              admin-state: enable
+              type: default
+              interface: "{{ formatted_interfaces }}"
+
+    # - name: Add network instance default
+    #   delegate_to: "{{ item }}"
+    #   loop:
+    #     - clab-teste-Spine2
+    #     - clab-teste-Spine1
+    #   nokia.srlinux.config:
+    #     update:
+    #       - path: /network-instance[name=default]
+    #         value:
+    #           admin-state: enable
+    #           type: default
+    #           interface:
+    #             - name: ethernet-1/3.0

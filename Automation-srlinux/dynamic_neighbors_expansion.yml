@@ -1,0 +1,138 @@
+- name: Underlay Config
+  hosts: all
+  gather_facts: false
+
+  vars_files:
+    - "vars_dynamic_expansion.yml"
+    - "netbox.yml"
+
+  tasks:
+    - name: 3 - Get interfaces
+      uri:
+        url: "{{ netbox_url }}api/ipam/ip-addresses/?device={{inventory_hostname}}&tag=leetc"
+        method: GET
+        return_content: yes
+        headers:
+          accept: "application/json"
+          Authorization: "Token {{ netbox_token }}"
+      register: ip_addresses
+
+    - name: Extract interface names
+      set_fact:
+        interfaces_full: >-
+          {{
+            ip_addresses.json.results
+            | selectattr('assigned_object', 'defined')
+            | map(attribute='assigned_object.name')
+            | list
+          }}
+
+    - name: Get connected interfaces from NetBox
+      uri:
+        url: "{{ netbox_url }}/api/dcim/cable-terminations/"
+        method: GET
+        return_content: yes
+        headers:
+          accept: "application/json"
+          Authorization: "Token {{ netbox_token }}"
+      register: nb_interfaces
+
+    - name: Build list of interface configs por host
+      set_fact:
+        interfaces_by_host: >-
+          {{
+            interfaces_by_host | default({}) |
+            combine({
+              item.termination.device.name: (
+                interfaces_by_host[item.termination.device.name] | default([]) +
+                [ item.termination.name ]
+              )
+            }, recursive=True)
+          }}
+      loop: "{{ nb_interfaces.json.results }}"
+      when: item.termination.device is defined
+
+    - name: Generate vars file from extracted interfaces
+      delegate_to: localhost
+      template:
+        src: dy_ngh_expansion.j2
+        dest: "vars_dynamic_expansion.yml"
+
+    - name: Set peer AS list dynamically
+      set_fact:
+        peer_as_list: >-
+          {{
+            [ AS[inventory_hostname] ] +
+            (
+            vars | dict2items |
+            selectattr('key', 'match', '^AS[0-9]+$') |
+            map(attribute='key') |
+            map('extract', vars) |
+            map('default', {}) |
+            map('dict2items') |
+            sum(start=[]) |
+            selectattr('key', 'equalto', inventory_hostname) |
+            map(attribute='value') |
+            list
+            )
+          }}
+
+
+    - name: Configure BGP Dynamic Neighbors for all interfaces
+      nokia.srlinux.config:
+        update:
+          - path: /network-instance[name=default]
+            value:
+              protocols:
+                bgp:
+                  dynamic-neighbors:
+                    interface:
+                      interface-name: "{{ item | trim }}"
+                      peer-group: "underlay"
+                      allowed-peer-as: "{{ peer_as_list }}"
+      loop: "{{ interfaces_dynamic[inventory_hostname] | reject('equalto', '') | list }}"
+
+
+
+
+    # - name: Configure BGP Dynamic Neighbors
+    #   nokia.srlinux.config:
+    #     update:
+    #       - path: /network-instance[name=default]
+    #         value:
+    #           protocols:
+    #             bgp:
+    #               dynamic-neighbors:
+    #                 interface:
+    #                   interface-name: "{{ INTERFACE1[inventory_hostname] | trim  }}"
+    #                   peer-group: "underlay"
+    #                   allowed-peer-as: "{{peer_as_list}}"
+
+    # - name: Configure BGP Dynamic Neighbors
+    #   nokia.srlinux.config:
+    #     update:
+    #       - path: /network-instance[name=default]
+    #         value:
+    #           protocols:
+    #             bgp:
+    #               dynamic-neighbors:
+    #                 interface:
+    #                   interface-name: "{{ INTERFACE2[inventory_hostname] | trim  }}"
+    #                   peer-group: "underlay"
+    #                   allowed-peer-as: "{{peer_as_list}}"
+
+    # - name: Configure BGP Dynamic Neighbors
+    #   when: inventory_hostname in ['clab-teste-Spine1', 'clab-teste-Spine2']
+    #   nokia.srlinux.config:
+    #     update:
+    #       - path: /network-instance[name=default]
+    #         value:
+    #           protocols:
+    #             bgp:
+    #               dynamic-neighbors:
+    #                 interface:
+    #                   interface-name: "{{ INTERFACE3[inventory_hostname]  | trim  }}"
+    #                   peer-group: "underlay"
+    #                   allowed-peer-as: "{{peer_as_list}}"
+
+

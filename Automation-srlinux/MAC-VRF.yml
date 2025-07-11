@@ -1,0 +1,150 @@
+- name: MAC_VRF Config
+  hosts: device_roles_leaf
+  gather_facts: false
+
+  vars_files:
+    - "netbox.yml"
+    - "leaf_asn.yml"
+
+  tasks:
+
+
+    - name: 3 - Get Overlay ASN
+      uri:
+        url: "{{ netbox_url }}/api/ipam/route-targets/?tag=leetc"
+        method: GET
+        return_content: yes
+        headers:
+          accept: "application/json"
+          Authorization: "Token {{ netbox_token }}"
+      register: ip_addresses
+
+    - name: Extract Overlay ASN
+      set_fact:
+        overlay_asn: >-
+          {{
+            ip_addresses.json.results
+            | selectattr('description', 'match', '^MAC-VRF-[0-9]+$')
+            | map(attribute='name')
+            | list
+            | first
+          }}
+
+    - name: Debug
+      debug:
+       var: ip_addresses.json.results     
+
+    - name: Extract Overlay ASN
+      set_fact:
+        macvrf_to_asn: >-
+          {{
+            dict(
+              ip_addresses.json.results
+              | selectattr('description', 'match', '^MAC-VRF-[0-9]+$')
+              | map(attribute='description') 
+              | zip(
+                ip_addresses.json.results
+                | selectattr('description', 'match', '^MAC-VRF-[0-9]+$')
+                | map(attribute='name')
+              )
+            )
+          }}
+
+    - name: Get interfaces from NetBox with VRF starting with MAC-VRF
+      uri:
+        url: "{{ netbox_url }}/api/dcim/interfaces/?device={{ inventory_hostname }}"
+        method: GET
+        headers:
+          Accept: "application/json"
+          Authorization: "Token {{ netbox_token }}"
+      register: netbox_interfaces
+
+    - name: Filtrar interfaces com VRF do tipo MAC-VRF
+      set_fact:
+        mac_vrf_interfaces: >-
+          {{
+            netbox_interfaces.json.results
+            | selectattr('vrf.name', 'defined')
+            | selectattr('vrf.name', 'match', '^MAC-VRF-[0-9]+$')
+            | map(attribute='name')
+            | list
+          }}     
+          
+    - name: Generate vars file from extracted ASN
+      delegate_to: localhost
+      template:
+        src: ASN_LEAF.j2
+        dest: "leaf_asn.yml"
+
+    - name: Set MAC-VRF ID
+      set_fact:
+        mac_vrf_id: "{{ overlay_asn.split(':')[1] }}"
+
+    - name: Debug
+      debug:
+       var: "{{ macvrf_to_asn['MAC-VRF-' ~ item.value] }}"
+      loop: "{{ interfaces2[inventory_hostname] | dict2items }}"
+
+
+    - name: interface bridge
+      nokia.srlinux.config:
+        update:
+          - path: /interface[name={{ item.key }}]
+            value:
+              vlan-tagging: true
+              admin-state: enable
+              description: "interface description set with Ansible"
+              subinterface:
+                - index: "{{ item.value }}"
+                  type: bridged
+                  vlan:
+                    encap:
+                      single-tagged:
+                        vlan-id: "{{ item.value }}"
+      loop: "{{ interfaces2[inventory_hostname]  | dict2items }}"
+
+    - name: VXLAN interface
+      nokia.srlinux.config:
+        update:
+          - path: /tunnel-interface[name=vxlan1]
+            value:
+              vxlan-interface:
+                - index:  "{{ item.value }}"
+                  type: bridged
+                  ingress:
+                    vni: "{{ item.value }}"
+      loop: "{{ interfaces2[inventory_hostname]  | dict2items }}"
+
+
+    - name: MAC-VRF
+      nokia.srlinux.config:
+        update:
+          - path: /network-instance[name=MAC-VRF-{{ item.value }}]
+            value:
+              admin-state: enable
+              type: mac-vrf
+              interface:
+                - name: "{{ item.key }}.{{ item.value }}"
+              vxlan-interface:
+                - name: vxlan1.{{ item.value }}
+      loop: "{{ interfaces2[inventory_hostname]  | dict2items }}"
+
+    - name: MAC-VRF
+      nokia.srlinux.config:
+        update:
+          - path: /network-instance[name=MAC-VRF-{{ item.value }}]
+            value:
+              protocols:
+                bgp-evpn:
+                  bgp-instance:
+                    id: 1
+                    evi: "{{ item.value }}"
+                    vxlan-interface: vxlan1.{{ item.value }}
+                    ecmp: 2
+                bgp-vpn:
+                  bgp-instance:
+                    id: 1
+                    route-target:
+                      import-rt: "target:{{ macvrf_to_asn['MAC-VRF-' ~ item.value] }}"
+                      export-rt: "target:{{ macvrf_to_asn['MAC-VRF-' ~ item.value] }}"
+      loop: "{{ interfaces2[inventory_hostname]  | dict2items }}"

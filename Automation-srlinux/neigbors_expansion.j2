@@ -1,0 +1,33 @@
+{# Separa leafs e spines #}
+{% set spines = groups['all'] | select('search', 'Spine') | list %}
+{% set leafs = groups['all'] | select('search', 'leaf') | list %}
+
+{# Extrai os Router_IDs dos leafs dinamicamente #}
+{% set router_ids = leafs | map('extract', hostvars) | map(attribute='custom_fields') | map(attribute='Router_ID') | list %}
+
+ID:
+{% for spine in spines %}
+  {{ spine }}: "{{ router_ids[0] }}"
+{% endfor %}
+
+{% for i in range(1, router_ids | length) %}
+ID{{ i }}:
+{% for spine in spines %}
+  {{ spine }}: "{{ router_ids[i] }}"
+{% endfor %}
+{% endfor %}
+
+{% set spines = groups['all'] | select('search', 'Spine') | list %}
+{% set leafs = groups['all'] | select('search', 'leaf') | list %}
+
+rr_peers:
+{% for spine in spines %}
+  {{ spine }}:
+    {% for leaf in leafs %}
+- "{{ hostvars[leaf]['custom_fields']['Router_ID'] }}"{% if not loop.last %}
+
+{% endif %}
+    {% endfor %}
+    
+{% endfor %}
+

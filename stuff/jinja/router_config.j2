@@ -1,0 +1,6 @@
+addresses:
+{% for host in groups['all'] %}
+  {{ host }}: "{{ hostvars[host]['ansible_host'] }}/24"
+{% endfor %}
+
+

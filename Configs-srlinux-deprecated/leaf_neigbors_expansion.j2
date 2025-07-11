@@ -1,0 +1,18 @@
+{# - Primeiro obtemos os ASNs de um leaf e de um spine como referência #}
+{% set leaf_asn = hostvars['clab-teste-leaf1']['custom_fields']['Router_ID'] %}
+{% set spine_asn = hostvars['clab-teste-Spine1']['custom_fields']['Router_ID'] %}
+{% set spine2_asn = hostvars['clab-teste-Spine2']['custom_fields']['Router_ID'] %}
+
+ID:
+{% for host in groups['all'] %}
+{% if 'leaf' in host %}
+  {{ host }}: "{{ spine_asn }}"
+{% endif %}
+{% endfor %}
+
+ID1:
+{% for host in groups['all'] %}
+{% if 'leaf' in host %}
+  {{ host }}: "{{ spine2_asn }}"
+{% endif %}
+{% endfor %}

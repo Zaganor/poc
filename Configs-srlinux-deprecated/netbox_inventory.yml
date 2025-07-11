@@ -1,0 +1,12 @@
+plugin: "netbox.netbox.nb_inventory"
+#api_endpoint: "http://pfc-ng.fil.isel.pt:8001/"
+token: "22049c3856dfc53015c1595ac48eadb8713fbda7"
+api_endpoint: "https://xoqg3665.cloud.netboxapp.com/"
+#token: "4bfbc38043f616cc419b19e729c5a04dc604c4c8"
+validate_certs: false
+config_context: false
+query_filters:
+  - tag: "teste"
+group_by:
+  - device_roles
+

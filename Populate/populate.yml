@@ -1,0 +1,37 @@
+- name: "Test populate netbox site"
+  hosts: localhost
+  gather_facts: false
+
+  vars_files:
+    - "netbox.yml"
+
+  tasks:
+    - name: Create Tag
+      netbox.netbox.netbox_tag:
+        netbox_url: "{{ netbox_url }}"
+        netbox_token: "{{ netbox_token }}"
+        data:
+          name: "LEETC"
+        state: present
+
+    - name: Create site in netbox
+      netbox.netbox.netbox_site:
+        netbox_url: "{{ netbox_url }}"
+        netbox_token: "{{ netbox_token }}"
+        data:
+          name: "POC-LEETC"
+          tags: "leetc"
+        state: present
+
+    - name: Create Devices_roles
+      netbox.netbox.netbox_device_role:
+        netbox_url: "{{ netbox_url }}"
+        netbox_token: "{{ netbox_token }}"
+        data:
+          name: "{{ item.name }}"
+          tags: "{{ item.tag }}"
+        state: present
+      loop:
+        - { name: "spine" , tag: "leetc"}
+        - { name: "leaf" , tag: "leetc"}
+

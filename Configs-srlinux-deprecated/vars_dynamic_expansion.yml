@@ -1,0 +1,33 @@
+
+AS:
+  clab-teste-leaf1: "4200000000"
+  clab-teste-leaf2: "4200000000"
+  clab-teste-leaf3: "4200000000"
+  clab-teste-Spine1: "4200000001"
+  clab-teste-Spine2: "4200000001"
+
+AS1:
+  clab-teste-Spine1: "4200000002"
+  clab-teste-Spine2: "4200000002"
+
+AS2:
+  clab-teste-Spine1: "4200000004"
+  clab-teste-Spine2: "4200000004"
+
+INTERFACE1:
+  clab-teste-leaf1: "ethernet-1/1.0"
+  clab-teste-leaf2: "ethernet-1/1.0"
+  clab-teste-leaf3: "ethernet-1/1.0"
+  clab-teste-Spine1: "ethernet-1/1.0"
+  clab-teste-Spine2: "ethernet-1/1.0"
+
+INTERFACE2:
+  clab-teste-leaf1: "ethernet-1/2.0"
+  clab-teste-leaf2: "ethernet-1/2.0"
+  clab-teste-leaf3: "ethernet-1/2.0"
+  clab-teste-Spine1: "ethernet-1/2.0"
+  clab-teste-Spine2: "ethernet-1/2.0"
+
+INTERFACE3:
+  clab-teste-Spine1: "ethernet-1/3.0"
+  clab-teste-Spine2: "ethernet-1/3.0"

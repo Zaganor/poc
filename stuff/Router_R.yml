@@ -1,0 +1,39 @@
+#Playbook usa o file criado por jinja para fazer a configuraçao do RR
+- name: Underlay Config
+  hosts: device_roles_spine
+  gather_facts: false
+
+  vars_files:
+    - "vars_RR.yml"
+
+    - name: Debug AS and ID values for current host
+      debug:
+        msg: "AS: {{ AS[inventory_hostname] }}, ID: {{ ID[inventory_hostname] }}, ID1: {{ ID1[inventory_hostname] }}"
+
+    - name: Define RR
+      nokia.srlinux.config:
+        update:
+          - path: /network-instance[name=default]
+            value:
+              type: "default"
+              description: "Done using ansible"
+              protocols:
+                bgp:
+                  group:
+                    - group-name: evpnRR
+                      admin-state: enable
+                      peer-as: "{{ AS[inventory_hostname] }}"
+                      local-as:
+                        - as-number: "{{ AS[inventory_hostname] }}"
+                      afi-safi:
+                        - afi-safi-name: evpn
+                          admin-state: enable
+                        - afi-safi-name: ipv4-unicast
+                          admin-state: disable
+                      router-reflector:
+                        - client: true
+                          cluster-id :  "{{ ID[inventory_hostname] }}"
+                neighbors:
+                  peer-address: "{{ ID1[inventory_hostname] }}"
+                  admin-state: enable
+                  peer-group: evpnRR

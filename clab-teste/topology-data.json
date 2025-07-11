@@ -1,0 +1,654 @@
+{
+  "name": "teste",
+  "type": "clab",
+  "clab": {
+    "config": {
+      "prefix": "clab",
+      "mgmt": {
+        "network": "clab",
+        "bridge": "br-8c9d6ae74a95",
+        "ipv4-subnet": "172.20.20.0/24",
+        "ipv4-gw": "172.20.20.1",
+        "ipv6-subnet": "3fff:172:20:20::/64",
+        "ipv6-gw": "3fff:172:20:20::1",
+        "mtu": 1500,
+        "external-access": true
+      }
+    }
+  },
+  "ssh-pub-keys": [],
+  "nodes": {
+    "Host1": {
+      "index": "0",
+      "shortname": "Host1",
+      "longname": "clab-teste-Host1",
+      "fqdn": "Host1.teste.io",
+      "group": "",
+      "labdir": "/home/tiago/poc/clab-teste/Host1",
+      "kind": "linux",
+      "image": "ghcr.io/hellt/network-multitool",
+      "mgmt-net": "",
+      "mgmt-intf": "",
+      "mgmt-ipv4-address": "172.20.20.9",
+      "mgmt-ipv4-prefix-length": 24,
+      "mgmt-ipv6-address": "3fff:172:20:20::b",
+      "mgmt-ipv6-prefix-length": 64,
+      "mac-address": "",
+      "labels": {
+        "clab-mgmt-net-bridge": "br-8c9d6ae74a95",
+        "clab-node-group": "",
+        "clab-node-kind": "linux",
+        "clab-node-lab-dir": "/home/tiago/poc/clab-teste/Host1",
+        "clab-node-longname": "clab-teste-Host1",
+        "clab-node-name": "Host1",
+        "clab-node-type": "",
+        "clab-owner": "tiago",
+        "clab-topo-file": "/home/tiago/poc/topologia.clab.yml",
+        "containerlab": "teste",
+        "graph-groupLabelPos": "bottom-center",
+        "graph-posX": "785",
+        "graph-posY": "365"
+      },
+      "port-bindings": [
+        {
+          "host-ip": "",
+          "host-port": 0,
+          "port": 443,
+          "protocol": "tcp"
+        },
+        {
+          "host-ip": "",
+          "host-port": 0,
+          "port": 80,
+          "protocol": "tcp"
+        }
+      ]
+    },
+    "Host2": {
+      "index": "1",
+      "shortname": "Host2",
+      "longname": "clab-teste-Host2",
+      "fqdn": "Host2.teste.io",
+      "group": "",
+      "labdir": "/home/tiago/poc/clab-teste/Host2",
+      "kind": "linux",
+      "image": "ghcr.io/hellt/network-multitool",
+      "mgmt-net": "",
+      "mgmt-intf": "",
+      "mgmt-ipv4-address": "172.20.20.11",
+      "mgmt-ipv4-prefix-length": 24,
+      "mgmt-ipv6-address": "3fff:172:20:20::d",
+      "mgmt-ipv6-prefix-length": 64,
+      "mac-address": "",
+      "labels": {
+        "clab-mgmt-net-bridge": "br-8c9d6ae74a95",
+        "clab-node-group": "",
+        "clab-node-kind": "linux",
+        "clab-node-lab-dir": "/home/tiago/poc/clab-teste/Host2",
+        "clab-node-longname": "clab-teste-Host2",
+        "clab-node-name": "Host2",
+        "clab-node-type": "",
+        "clab-owner": "tiago",
+        "clab-topo-file": "/home/tiago/poc/topologia.clab.yml",
+        "containerlab": "teste",
+        "graph-groupLabelPos": "bottom-center",
+        "graph-posX": "855",
+        "graph-posY": "365"
+      },
+      "port-bindings": [
+        {
+          "host-ip": "",
+          "host-port": 0,
+          "port": 443,
+          "protocol": "tcp"
+        },
+        {
+          "host-ip": "",
+          "host-port": 0,
+          "port": 80,
+          "protocol": "tcp"
+        }
+      ]
+    },
+    "Host3": {
+      "index": "2",
+      "shortname": "Host3",
+      "longname": "clab-teste-Host3",
+      "fqdn": "Host3.teste.io",
+      "group": "",
+      "labdir": "/home/tiago/poc/clab-teste/Host3",
+      "kind": "linux",
+      "image": "ghcr.io/hellt/network-multitool",
+      "mgmt-net": "",
+      "mgmt-intf": "",
+      "mgmt-ipv4-address": "172.20.20.4",
+      "mgmt-ipv4-prefix-length": 24,
+      "mgmt-ipv6-address": "3fff:172:20:20::6",
+      "mgmt-ipv6-prefix-length": 64,
+      "mac-address": "",
+      "labels": {
+        "clab-mgmt-net-bridge": "br-8c9d6ae74a95",
+        "clab-node-group": "",
+        "clab-node-kind": "linux",
+        "clab-node-lab-dir": "/home/tiago/poc/clab-teste/Host3",
+        "clab-node-longname": "clab-teste-Host3",
+        "clab-node-name": "Host3",
+        "clab-node-type": "",
+        "clab-owner": "tiago",
+        "clab-topo-file": "/home/tiago/poc/topologia.clab.yml",
+        "containerlab": "teste",
+        "graph-groupLabelPos": "bottom-center",
+        "graph-posX": "925",
+        "graph-posY": "365"
+      },
+      "port-bindings": [
+        {
+          "host-ip": "",
+          "host-port": 0,
+          "port": 443,
+          "protocol": "tcp"
+        },
+        {
+          "host-ip": "",
+          "host-port": 0,
+          "port": 80,
+          "protocol": "tcp"
+        }
+      ]
+    },
+    "Host4": {
+      "index": "3",
+      "shortname": "Host4",
+      "longname": "clab-teste-Host4",
+      "fqdn": "Host4.teste.io",
+      "group": "",
+      "labdir": "/home/tiago/poc/clab-teste/Host4",
+      "kind": "linux",
+      "image": "ghcr.io/hellt/network-multitool",
+      "mgmt-net": "",
+      "mgmt-intf": "",
+      "mgmt-ipv4-address": "172.20.20.3",
+      "mgmt-ipv4-prefix-length": 24,
+      "mgmt-ipv6-address": "3fff:172:20:20::5",
+      "mgmt-ipv6-prefix-length": 64,
+      "mac-address": "",
+      "labels": {
+        "clab-mgmt-net-bridge": "br-8c9d6ae74a95",
+        "clab-node-group": "",
+        "clab-node-kind": "linux",
+        "clab-node-lab-dir": "/home/tiago/poc/clab-teste/Host4",
+        "clab-node-longname": "clab-teste-Host4",
+        "clab-node-name": "Host4",
+        "clab-node-type": "",
+        "clab-owner": "tiago",
+        "clab-topo-file": "/home/tiago/poc/topologia.clab.yml",
+        "containerlab": "teste",
+        "graph-groupLabelPos": "bottom-center",
+        "graph-posX": "965",
+        "graph-posY": "435"
+      },
+      "port-bindings": [
+        {
+          "host-ip": "",
+          "host-port": 0,
+          "port": 80,
+          "protocol": "tcp"
+        },
+        {
+          "host-ip": "",
+          "host-port": 0,
+          "port": 443,
+          "protocol": "tcp"
+        }
+      ]
+    },
+    "Spine1": {
+      "index": "4",
+      "shortname": "Spine1",
+      "longname": "clab-teste-Spine1",
+      "fqdn": "Spine1.teste.io",
+      "group": "",
+      "labdir": "/home/tiago/poc/clab-teste/Spine1",
+      "kind": "nokia_srlinux",
+      "image": "ghcr.io/nokia/srlinux",
+      "mgmt-net": "",
+      "mgmt-intf": "",
+      "mgmt-ipv4-address": "172.20.20.2",
+      "mgmt-ipv4-prefix-length": 24,
+      "mgmt-ipv6-address": "3fff:172:20:20::4",
+      "mgmt-ipv6-prefix-length": 64,
+      "mac-address": "1a:ff:04:00:00:00",
+      "labels": {
+        "clab-mgmt-net-bridge": "br-8c9d6ae74a95",
+        "clab-node-group": "",
+        "clab-node-kind": "nokia_srlinux",
+        "clab-node-lab-dir": "/home/tiago/poc/clab-teste/Spine1",
+        "clab-node-longname": "clab-teste-Spine1",
+        "clab-node-name": "Spine1",
+        "clab-node-type": "ixrd3l",
+        "clab-owner": "tiago",
+        "clab-topo-file": "/home/tiago/poc/topologia.clab.yml",
+        "containerlab": "teste",
+        "graph-group": "Data Center Spine",
+        "graph-groupLabelPos": "top-center",
+        "graph-level": "1",
+        "graph-posX": "851",
+        "graph-posY": "244"
+      },
+      "port-bindings": [
+      ]
+    },
+    "Spine2": {
+      "index": "5",
+      "shortname": "Spine2",
+      "longname": "clab-teste-Spine2",
+      "fqdn": "Spine2.teste.io",
+      "group": "",
+      "labdir": "/home/tiago/poc/clab-teste/Spine2",
+      "kind": "nokia_srlinux",
+      "image": "ghcr.io/nokia/srlinux",
+      "mgmt-net": "",
+      "mgmt-intf": "",
+      "mgmt-ipv4-address": "172.20.20.8",
+      "mgmt-ipv4-prefix-length": 24,
+      "mgmt-ipv6-address": "3fff:172:20:20::a",
+      "mgmt-ipv6-prefix-length": 64,
+      "mac-address": "1a:96:05:00:00:00",
+      "labels": {
+        "clab-mgmt-net-bridge": "br-8c9d6ae74a95",
+        "clab-node-group": "",
+        "clab-node-kind": "nokia_srlinux",
+        "clab-node-lab-dir": "/home/tiago/poc/clab-teste/Spine2",
+        "clab-node-longname": "clab-teste-Spine2",
+        "clab-node-name": "Spine2",
+        "clab-node-type": "ixrd3l",
+        "clab-owner": "tiago",
+        "clab-topo-file": "/home/tiago/poc/topologia.clab.yml",
+        "containerlab": "teste",
+        "graph-group": "Data Center Spine",
+        "graph-groupLabelPos": "top-center",
+        "graph-level": "1",
+        "graph-posX": "896",
+        "graph-posY": "239"
+      },
+      "port-bindings": [
+      ]
+    },
+    "gnmic": {
+      "index": "6",
+      "shortname": "gnmic",
+      "longname": "clab-teste-gnmic",
+      "fqdn": "gnmic.teste.io",
+      "group": "10",
+      "labdir": "/home/tiago/poc/clab-teste/gnmic",
+      "kind": "linux",
+      "image": "ghcr.io/openconfig/gnmic:0.39.1",
+      "mgmt-net": "",
+      "mgmt-intf": "",
+      "mgmt-ipv4-address": "172.20.20.41",
+      "mgmt-ipv4-prefix-length": 24,
+      "mgmt-ipv6-address": "3fff:172:20:20::2",
+      "mgmt-ipv6-prefix-length": 64,
+      "mac-address": "",
+      "labels": {
+        "clab-mgmt-net-bridge": "br-8c9d6ae74a95",
+        "clab-node-group": "10",
+        "clab-node-kind": "linux",
+        "clab-node-lab-dir": "/home/tiago/poc/clab-teste/gnmic",
+        "clab-node-longname": "clab-teste-gnmic",
+        "clab-node-name": "gnmic",
+        "clab-node-type": "",
+        "clab-owner": "tiago",
+        "clab-topo-file": "/home/tiago/poc/topologia.clab.yml",
+        "containerlab": "teste",
+        "graph-groupLabelPos": "bottom-center",
+        "graph-posX": "615",
+        "graph-posY": "225"
+      },
+      "port-bindings": [
+      ]
+    },
+    "grafana": {
+      "index": "7",
+      "shortname": "grafana",
+      "longname": "clab-teste-grafana",
+      "fqdn": "grafana.teste.io",
+      "group": "10",
+      "labdir": "/home/tiago/poc/clab-teste/grafana",
+      "kind": "linux",
+      "image": "grafana/grafana:11.2.0",
+      "mgmt-net": "",
+      "mgmt-intf": "",
+      "mgmt-ipv4-address": "172.20.20.5",
+      "mgmt-ipv4-prefix-length": 24,
+      "mgmt-ipv6-address": "3fff:172:20:20::7",
+      "mgmt-ipv6-prefix-length": 64,
+      "mac-address": "",
+      "labels": {
+        "clab-mgmt-net-bridge": "br-8c9d6ae74a95",
+        "clab-node-group": "10",
+        "clab-node-kind": "linux",
+        "clab-node-lab-dir": "/home/tiago/poc/clab-teste/grafana",
+        "clab-node-longname": "clab-teste-grafana",
+        "clab-node-name": "grafana",
+        "clab-node-type": "",
+        "clab-owner": "tiago",
+        "clab-topo-file": "/home/tiago/poc/topologia.clab.yml",
+        "containerlab": "teste",
+        "graph-groupLabelPos": "bottom-center",
+        "graph-posX": "615",
+        "graph-posY": "315"
+      },
+      "port-bindings": [
+        {
+          "host-ip": "0.0.0.0",
+          "host-port": 3000,
+          "port": 3000,
+          "protocol": "tcp"
+        },
+        {
+          "host-ip": "::",
+          "host-port": 3000,
+          "port": 3000,
+          "protocol": "tcp"
+        }
+      ]
+    },
+    "leaf1": {
+      "index": "8",
+      "shortname": "leaf1",
+      "longname": "clab-teste-leaf1",
+      "fqdn": "leaf1.teste.io",
+      "group": "",
+      "labdir": "/home/tiago/poc/clab-teste/leaf1",
+      "kind": "nokia_srlinux",
+      "image": "ghcr.io/nokia/srlinux",
+      "mgmt-net": "",
+      "mgmt-intf": "",
+      "mgmt-ipv4-address": "172.20.20.10",
+      "mgmt-ipv4-prefix-length": 24,
+      "mgmt-ipv6-address": "3fff:172:20:20::c",
+      "mgmt-ipv6-prefix-length": 64,
+      "mac-address": "1a:bf:08:00:00:00",
+      "labels": {
+        "clab-mgmt-net-bridge": "br-8c9d6ae74a95",
+        "clab-node-group": "",
+        "clab-node-kind": "nokia_srlinux",
+        "clab-node-lab-dir": "/home/tiago/poc/clab-teste/leaf1",
+        "clab-node-longname": "clab-teste-leaf1",
+        "clab-node-name": "leaf1",
+        "clab-node-type": "ixrd2l",
+        "clab-owner": "tiago",
+        "clab-topo-file": "/home/tiago/poc/topologia.clab.yml",
+        "containerlab": "teste",
+        "graph-group": "groupName13",
+        "graph-groupLabelPos": "bottom-center",
+        "graph-level": "1",
+        "graph-posX": "825",
+        "graph-posY": "305"
+      },
+      "port-bindings": [
+      ]
+    },
+    "leaf2": {
+      "index": "9",
+      "shortname": "leaf2",
+      "longname": "clab-teste-leaf2",
+      "fqdn": "leaf2.teste.io",
+      "group": "",
+      "labdir": "/home/tiago/poc/clab-teste/leaf2",
+      "kind": "nokia_srlinux",
+      "image": "ghcr.io/nokia/srlinux",
+      "mgmt-net": "",
+      "mgmt-intf": "",
+      "mgmt-ipv4-address": "172.20.20.7",
+      "mgmt-ipv4-prefix-length": 24,
+      "mgmt-ipv6-address": "3fff:172:20:20::9",
+      "mgmt-ipv6-prefix-length": 64,
+      "mac-address": "1a:9b:09:00:00:00",
+      "labels": {
+        "clab-mgmt-net-bridge": "br-8c9d6ae74a95",
+        "clab-node-group": "",
+        "clab-node-kind": "nokia_srlinux",
+        "clab-node-lab-dir": "/home/tiago/poc/clab-teste/leaf2",
+        "clab-node-longname": "clab-teste-leaf2",
+        "clab-node-name": "leaf2",
+        "clab-node-type": "ixrd2l",
+        "clab-owner": "tiago",
+        "clab-topo-file": "/home/tiago/poc/topologia.clab.yml",
+        "containerlab": "teste",
+        "graph-group": "groupName14",
+        "graph-groupLabelPos": "bottom-center",
+        "graph-level": "1",
+        "graph-posX": "925",
+        "graph-posY": "315"
+      },
+      "port-bindings": [
+      ]
+    },
+    "leaf3": {
+      "index": "10",
+      "shortname": "leaf3",
+      "longname": "clab-teste-leaf3",
+      "fqdn": "leaf3.teste.io",
+      "group": "",
+      "labdir": "/home/tiago/poc/clab-teste/leaf3",
+      "kind": "nokia_srlinux",
+      "image": "ghcr.io/nokia/srlinux",
+      "mgmt-net": "",
+      "mgmt-intf": "",
+      "mgmt-ipv4-address": "172.20.20.6",
+      "mgmt-ipv4-prefix-length": 24,
+      "mgmt-ipv6-address": "3fff:172:20:20::8",
+      "mgmt-ipv6-prefix-length": 64,
+      "mac-address": "1a:71:0a:00:00:00",
+      "labels": {
+        "clab-mgmt-net-bridge": "br-8c9d6ae74a95",
+        "clab-node-group": "",
+        "clab-node-kind": "nokia_srlinux",
+        "clab-node-lab-dir": "/home/tiago/poc/clab-teste/leaf3",
+        "clab-node-longname": "clab-teste-leaf3",
+        "clab-node-name": "leaf3",
+        "clab-node-type": "ixrd2l",
+        "clab-owner": "tiago",
+        "clab-topo-file": "/home/tiago/poc/topologia.clab.yml",
+        "containerlab": "teste",
+        "graph-group": "Data Center Leafs",
+        "graph-groupLabelPos": "top-left",
+        "graph-level": "1",
+        "graph-posX": "965",
+        "graph-posY": "335"
+      },
+      "port-bindings": [
+      ]
+    },
+    "prometheus": {
+      "index": "11",
+      "shortname": "prometheus",
+      "longname": "clab-teste-prometheus",
+      "fqdn": "prometheus.teste.io",
+      "group": "10",
+      "labdir": "/home/tiago/poc/clab-teste/prometheus",
+      "kind": "linux",
+      "image": "quay.io/prometheus/prometheus:v2.54.1",
+      "mgmt-net": "",
+      "mgmt-intf": "",
+      "mgmt-ipv4-address": "172.20.20.42",
+      "mgmt-ipv4-prefix-length": 24,
+      "mgmt-ipv6-address": "3fff:172:20:20::3",
+      "mgmt-ipv6-prefix-length": 64,
+      "mac-address": "",
+      "labels": {
+        "clab-mgmt-net-bridge": "br-8c9d6ae74a95",
+        "clab-node-group": "10",
+        "clab-node-kind": "linux",
+        "clab-node-lab-dir": "/home/tiago/poc/clab-teste/prometheus",
+        "clab-node-longname": "clab-teste-prometheus",
+        "clab-node-name": "prometheus",
+        "clab-node-type": "",
+        "clab-owner": "tiago",
+        "clab-topo-file": "/home/tiago/poc/topologia.clab.yml",
+        "containerlab": "teste",
+        "graph-groupLabelPos": "bottom-center",
+        "graph-posX": "615",
+        "graph-posY": "275"
+      },
+      "port-bindings": [
+        {
+          "host-ip": "0.0.0.0",
+          "host-port": 9090,
+          "port": 9090,
+          "protocol": "tcp"
+        },
+        {
+          "host-ip": "::",
+          "host-port": 9090,
+          "port": 9090,
+          "protocol": "tcp"
+        }
+      ]
+    }
+  },
+  "links": [
+    {
+      "a": {
+        "node": "Spine1",
+        "interface": "e1-1",
+        "mac": "aa:c1:ab:49:40:a3",
+        "peer": "z"
+      },
+      "z": {
+        "node": "leaf1",
+        "interface": "e1-1",
+        "mac": "aa:c1:ab:dd:d6:9e",
+        "peer": "a"
+      }
+    },
+    {
+      "a": {
+        "node": "Spine1",
+        "interface": "e1-2",
+        "mac": "aa:c1:ab:79:26:e3",
+        "peer": "z"
+      },
+      "z": {
+        "node": "leaf2",
+        "interface": "e1-1",
+        "mac": "aa:c1:ab:ce:32:a4",
+        "peer": "a"
+      }
+    },
+    {
+      "a": {
+        "node": "Spine1",
+        "interface": "e1-3",
+        "mac": "aa:c1:ab:5a:3d:30",
+        "peer": "z"
+      },
+      "z": {
+        "node": "leaf3",
+        "interface": "e1-1",
+        "mac": "aa:c1:ab:f9:bd:87",
+        "peer": "a"
+      }
+    },
+    {
+      "a": {
+        "node": "Spine2",
+        "interface": "e1-1",
+        "mac": "aa:c1:ab:3e:be:9d",
+        "peer": "z"
+      },
+      "z": {
+        "node": "leaf1",
+        "interface": "e1-2",
+        "mac": "aa:c1:ab:16:4b:51",
+        "peer": "a"
+      }
+    },
+    {
+      "a": {
+        "node": "Spine2",
+        "interface": "e1-2",
+        "mac": "aa:c1:ab:f9:c9:e0",
+        "peer": "z"
+      },
+      "z": {
+        "node": "leaf2",
+        "interface": "e1-2",
+        "mac": "aa:c1:ab:c1:1e:43",
+        "peer": "a"
+      }
+    },
+    {
+      "a": {
+        "node": "Spine2",
+        "interface": "e1-3",
+        "mac": "aa:c1:ab:4f:39:11",
+        "peer": "z"
+      },
+      "z": {
+        "node": "leaf3",
+        "interface": "e1-2",
+        "mac": "aa:c1:ab:99:45:ec",
+        "peer": "a"
+      }
+    },
+    {
+      "a": {
+        "node": "leaf1",
+        "interface": "e1-3",
+        "mac": "aa:c1:ab:9d:48:7b",
+        "peer": "z"
+      },
+      "z": {
+        "node": "Host1",
+        "interface": "eth1",
+        "mac": "aa:c1:ab:b5:76:d1",
+        "peer": "a"
+      }
+    },
+    {
+      "a": {
+        "node": "leaf1",
+        "interface": "e1-4",
+        "mac": "aa:c1:ab:11:77:d1",
+        "peer": "z"
+      },
+      "z": {
+        "node": "Host2",
+        "interface": "eth1",
+        "mac": "aa:c1:ab:e6:e9:06",
+        "peer": "a"
+      }
+    },
+    {
+      "a": {
+        "node": "leaf2",
+        "interface": "e1-3",
+        "mac": "aa:c1:ab:9d:30:87",
+        "peer": "z"
+      },
+      "z": {
+        "node": "Host3",
+        "interface": "eth1",
+        "mac": "aa:c1:ab:10:16:4a",
+        "peer": "a"
+      }
+    },
+    {
+      "a": {
+        "node": "leaf3",
+        "interface": "e1-3",
+        "mac": "aa:c1:ab:9d:67:ee",
+        "peer": "z"
+      },
+      "z": {
+        "node": "Host4",
+        "interface": "eth1",
+        "mac": "aa:c1:ab:a4:ee:eb",
+        "peer": "a"
+      }
+    }
+  ]
+}

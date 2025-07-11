@@ -1,0 +1,13 @@
+ID:
+{% for host in groups['all'] %}
+{% if 'spine' in hostvars[host]['device_roles'] %}
+  {{ host }}: "{{ hostvars[host]['custom_fields']['Router_ID'] }}"
+{% endif %}
+{% endfor %}
+
+ID1:
+{% for host in groups['all'] %}
+{% if 'leaf' in hostvars[host]['device_roles'] %}
+  {{ host }}: "{{ hostvars[host]['custom_fields']['Router_ID'] }}"
+{% endif %}
+{% endfor %}

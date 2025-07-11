@@ -1,0 +1,11 @@
+# main.yml
+- import_playbook: GET_ip.yml
+- import_playbook: inter_config_expansion.yml
+- import_playbook: system_expansion.yml
+- import_playbook: BGP_expansion.yml
+- import_playbook: dynamic_neighbors_expansion.yml
+- import_playbook: Leaf_overlay_expansion.yml
+- import_playbook: Router_R_expansion.yml
+- import_playbook: Spine_neighbors_expansion.yml
+- import_playbook: Leaf_neighbors_expansion.yml
+

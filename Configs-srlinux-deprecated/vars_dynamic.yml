@@ -1,0 +1,22 @@
+
+AS:
+  clab-poc-leetc-leaf1: "4200000000"
+  clab-poc-leetc-leaf2: "4200000000"
+  clab-poc-leetc-Spine1: "4200000001"
+  clab-poc-leetc-Spine2: "4200000001"
+
+AS1:
+  clab-poc-leetc-Spine1: "4200000002"
+  clab-poc-leetc-Spine2: "4200000002"
+
+INTERFACE1:
+  clab-poc-leetc-leaf1: "ethernet-1/1.0"
+  clab-poc-leetc-leaf2: "ethernet-1/1.0"
+  clab-poc-leetc-Spine1: "ethernet-1/1.0"
+  clab-poc-leetc-Spine2: "ethernet-1/1.0"
+
+INTERFACE2:
+  clab-poc-leetc-leaf1: "ethernet-1/2.0"
+  clab-poc-leetc-leaf2: "ethernet-1/2.0"
+  clab-poc-leetc-Spine1: "ethernet-1/2.0"
+  clab-poc-leetc-Spine2: "ethernet-1/2.0"

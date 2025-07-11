@@ -1,0 +1,8 @@
+ID:
+  clab-teste-Spine1: "10.0.2.21"
+  clab-teste-Spine2: "10.0.3.21"
+
+ID1:
+  clab-teste-leaf1: "10.1.0.21"
+  clab-teste-leaf2: "10.0.1.21"
+  clab-teste-leaf3: "10.0.5.21"

@@ -1,0 +1,123 @@
+- name: MAC_VRF Config
+  hosts: device_roles_leaf
+  gather_facts: false
+
+  vars_files:
+    - "netbox.yml"
+    - "leaf_asn.yml"
+
+  tasks:
+
+    - name: interface bridge
+      nokia.srlinux.config:
+        update:
+          - path: /interface[name=ethernet-1/3]
+            value:
+              vlan-tagging: true
+              admin-state: enable
+              description: "interface description set with Ansible"
+              subinterface:
+                - index: 10
+                  type: bridged
+                  vlan:
+                    encap:
+                      single-tagged:
+                        vlan-id: 10
+
+    - name: interface bridge
+      delegate_to: clab-poc-leetc-leaf1
+      nokia.srlinux.config:
+        update:
+          - path: /interface[name=ethernet-1/4]
+            value:
+              vlan-tagging: true
+              admin-state: enable
+              description: "interface description set with Ansible"
+              subinterface:
+                - index: 10
+                  type: bridged
+                  vlan:
+                    encap:
+                      single-tagged:
+                        vlan-id: 10
+
+    - name: VXLAN interface
+      nokia.srlinux.config:
+        update:
+          - path: /tunnel-interface[name=vxlan1]
+            value:
+              vxlan-interface:
+                - index: 10
+                  type: bridged
+                  ingress:
+                    vni: 10
+
+
+    - name: MAC-VRF
+      nokia.srlinux.config:
+        update:
+          - path: /network-instance[name=MAC-VRF-10]
+            value:
+              admin-state: enable
+              type: mac-vrf
+              interface:
+                - name: ethernet-1/3.10
+              vxlan-interface:
+                - name: vxlan1.10
+
+    - name: MAC-VRF
+      delegate_to: clab-poc-leetc-leaf1
+      nokia.srlinux.config:
+        update:
+          - path: /network-instance[name=MAC-VRF-10]
+            value:
+              admin-state: enable
+              type: mac-vrf
+              interface:
+                - name: ethernet-1/4.10
+
+    - name: 3 - Get Overlay ASN
+      uri:
+        url: "{{ netbox_url }}/api/ipam/route-targets/?tag=leetc"
+        method: GET
+        return_content: yes
+        headers:
+          accept: "application/json"
+          Authorization: "Token {{ netbox_token }}"
+      register: ip_addresses
+
+    - name: Extract Overlay ASN
+      set_fact:
+        overlay_asn: >-
+          {{
+            ip_addresses.json.results
+            | selectattr('description', 'equalto', 'MAC-VRF')
+            | map(attribute='name')
+            | list
+            | first
+          }}
+          
+    - name: Generate vars file from extracted ASN
+      delegate_to: localhost
+      template:
+        src: ASN_LEAF.j2
+        dest: "leaf_asn.yml"
+
+    - name: MAC-VRF
+      nokia.srlinux.config:
+        update:
+          - path: /network-instance[name=MAC-VRF-10]
+            value:
+              protocols:
+                bgp-evpn:
+                  bgp-instance:
+                    id: 1
+                    evi: 10
+                    vxlan-interface: vxlan1.10
+                    ecmp: 2
+                bgp-vpn:
+                  bgp-instance:
+                    id: 1
+                    route-target:
+                      import-rt: "target:{{AS[inventory_hostname]}}"
+                      export-rt: "target:{{AS[inventory_hostname]}}"

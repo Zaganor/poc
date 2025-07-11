@@ -1,0 +1,53 @@
+- name: Overlay Config
+  hosts: device_roles_leaf
+  gather_facts: false
+
+  vars_files:
+    - "vars_neigh_leaf_expansion.yml"
+
+  tasks:
+    - template:
+        src: leaf_neigbors_expansion.j2
+        dest: vars_neigh_leaf_expansion.yml
+
+
+    - name: Define Leaf neighbors dynamically
+      nokia.srlinux.config:
+        update:
+          - path: /network-instance[name=default]
+            value:
+              type: "default"
+              description: "Done using ansible"
+              protocols:
+                bgp:
+                  neighbor:
+                    peer-address: "{{ item }}"
+                    peer-group: "evpnRR"
+      loop: "{{ rr_peers[inventory_hostname] | default([]) }}"
+      when: rr_peers[inventory_hostname] is defined        
+
+    # - name: Define Leaf neighbors
+    #   nokia.srlinux.config:
+    #     update:
+    #       - path: /network-instance[name=default]
+    #         value:
+    #           type: "default"
+    #           description: "Done using ansible"
+    #           protocols:
+    #             bgp:
+    #               neighbor:
+    #                 peer-address: "{{ ID[inventory_hostname] }}"
+    #                 peer-group: "evpnRR"
+
+    # - name: Define Leaf neighbors
+    #   nokia.srlinux.config:
+    #     update:
+    #       - path: /network-instance[name=default]
+    #         value:
+    #           type: "default"
+    #           description: "Done using ansible"
+    #           protocols:
+    #             bgp:
+    #               neighbor:
+    #                 peer-address: "{{ ID1[inventory_hostname] }}"
+    #                 peer-group: "evpnRR"

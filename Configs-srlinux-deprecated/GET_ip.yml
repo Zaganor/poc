@@ -1,0 +1,76 @@
+- name: Get_ips Config
+  hosts: all
+  gather_facts: false
+
+  vars_files:
+    - "netbox.yml"
+
+  tasks:
+    - name: 3 - Get IP Addresses
+      uri:
+        url: "{{ netbox_url }}api/ipam/ip-addresses/?device={{inventory_hostname}}&tag=leetc"
+        method: GET
+        return_content: yes
+        headers:
+          accept: "application/json"
+          Authorization: "Token {{ netbox_token }}"
+      register: ip_addresses
+
+    - name: Extract IP of specific interface
+      set_fact:
+        eth1_ip: >-
+          {{
+            ip_addresses.json.results
+            | selectattr('assigned_object', 'defined')
+            | selectattr('assigned_object.name', 'equalto', 'ethernet-1/1')
+            | map(attribute='address')
+            | list
+            | first
+            | default('')
+          }}
+        eth2_ip: >-
+          {{
+            ip_addresses.json.results
+            | selectattr('assigned_object', 'defined')
+            | selectattr('assigned_object.name', 'equalto', 'ethernet-1/2')
+            | map(attribute='address')
+            | list
+            | first
+            | default('')            
+          }}
+        eth3_ip: >-   # expansao v
+          {{
+            ip_addresses.json.results
+            | selectattr('assigned_object', 'defined')
+            | selectattr('assigned_object.name', 'equalto', 'ethernet-1/3')
+            | map(attribute='address')
+            | list
+            | first
+            | default('')
+          }}
+        eth4_ip: >-
+          {{
+            ip_addresses.json.results
+            | selectattr('assigned_object', 'defined')
+            | selectattr('assigned_object.name', 'equalto', 'ethernet-1/4')
+            | map(attribute='address')
+            | list
+            | first
+            | default('')
+          }}
+        eth5_ip: >-
+          {{
+            ip_addresses.json.results
+            | selectattr('assigned_object', 'defined')
+            | selectattr('assigned_object.name', 'equalto', 'ethernet-1/5')
+            | map(attribute='address')
+            | list
+            | first
+            | default('')
+          }}
+
+    - name: Generate vars file from extracted IPs
+      delegate_to: localhost
+      template:
+        src: IP.j2
+        dest: "./generated_vars.yml"

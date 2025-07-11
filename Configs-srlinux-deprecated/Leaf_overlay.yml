@@ -1,0 +1,57 @@
+- name: Overlay leafs Config
+  hosts: device_roles_leaf
+  gather_facts: false
+
+  vars_files:
+    - "netbox.yml"
+    - "overlay_asn.yml"
+  tasks:
+    - name: 3 - Get Overlay ASN
+      uri:
+        url: "{{ netbox_url }}api/ipam/asns/?device={{inventory_hostname}}&tag=leetc"
+        method: GET
+        return_content: yes
+        headers:
+          accept: "application/json"
+          Authorization: "Token {{ netbox_token }}"
+      register: ip_addresses
+
+    - name: Extract Overlay ASN
+      set_fact:
+        overlay_asn: >-
+          {{
+            ip_addresses.json.results
+            | selectattr('description', 'equalto', 'ASN do overlay')
+            | map(attribute='asn')
+            | list
+            | first
+          }}
+
+    - name: Generate vars file from extracted ASN
+      delegate_to: localhost
+      template:
+        src: OVERLAY_ASN.j2
+        dest: "overlay_asn.yml"
+
+    - name: Define Leafs
+      nokia.srlinux.config:
+        update:
+          - path: /network-instance[name=default]
+            value:
+              type: "default"
+              description: "Done using ansible"
+              protocols:
+                bgp:
+                  group:
+                    - group-name: evpnRR
+                      admin-state: enable
+                      peer-as: "{{ AS[inventory_hostname] }}"
+                      local-as:
+                        as-number: "{{ AS[inventory_hostname] }}"
+                      afi-safi:
+                        - afi-safi-name: evpn
+                          admin-state: enable
+                        - afi-safi-name: ipv4-unicast
+                          admin-state: disable
+                        - afi-safi-name: ipv6-unicast
+                          admin-state: enable

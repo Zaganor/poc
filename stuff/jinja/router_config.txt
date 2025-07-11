@@ -1,0 +1,7 @@
+address:
+  clab-poc-leetc-leaf1: "172.20.20.14/24"
+  clab-poc-leetc-leaf2: "172.20.20.15/24"
+  clab-poc-leetc-Spine1: "172.20.20.12/24"
+  clab-poc-leetc-Spine2: "172.20.20.13/24"
+
+

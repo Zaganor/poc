@@ -1,0 +1,31 @@
+AS:
+{% for host in groups['all'] if 'leaf' in host %}
+  {{ host }}: "{{ hostvars[host].overlay_asn }}"
+{% endfor %}
+
+macvrf_to_asn:
+{% for item in ip_addresses.json.results if item.description is match('^MAC-VRF-[0-9]+$') %}
+  {{ item.description }}: "{{ item.name }}"
+{% endfor %}
+
+interfaces:
+{% for host in groups['all'] if 'leaf' in host %}
+  {{ host }}:
+{% for item in hostvars[host]['mac_vrf_interfaces'] %}
+    {{ item.split('.')[0] }}: {{ overlay_asn.split(':')[1] }}
+{% endfor %}
+{% endfor %}
+
+interfaces2:
+{% for host in groups['all'] if 'leaf' in host %}
+  {{ host }}:
+{% for iface in hostvars[host]['netbox_interfaces']['json']['results'] %}
+{%   if iface.vrf.name is defined and iface.vrf.name.startswith('MAC-VRF-') %}
+    {{ iface.name }}: {{ macvrf_to_asn[iface.vrf.name].split(':')[1] }}
+{%   endif %}
+{% endfor %}
+{% endfor %}
+
+
+
+

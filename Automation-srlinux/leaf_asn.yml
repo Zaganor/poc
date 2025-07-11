@@ -1,0 +1,29 @@
+AS:
+  clab-teste-leaf1: "65000:10"
+  clab-teste-leaf2: "65000:10"
+  clab-teste-leaf3: "65000:10"
+
+macvrf_to_asn:
+  MAC-VRF-10: "65000:10"
+  MAC-VRF-20: "65000:20"
+
+interfaces:
+  clab-teste-leaf1:
+    ethernet-1/3: 10
+    ethernet-1/4: 10
+  clab-teste-leaf2:
+    ethernet-1/3: 10
+  clab-teste-leaf3:
+    ethernet-1/3: 10
+
+interfaces2:
+  clab-teste-leaf1:
+    ethernet-1/3: 10
+    ethernet-1/4: 20
+  clab-teste-leaf2:
+    ethernet-1/3: 10
+  clab-teste-leaf3:
+    ethernet-1/3: 10
+
+
+

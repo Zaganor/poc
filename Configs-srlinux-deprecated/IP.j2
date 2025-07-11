@@ -1,0 +1,26 @@
+ethernet_1_1:
+{% for host in groups['all'] %}
+  {{ host }}: "{{ hostvars[host].eth1_ip }}"
+{% endfor %}
+ethernet_1_2:
+{% for host in groups['all'] %}
+  {{ host }}: "{{ hostvars[host].eth2_ip }}" 
+{% endfor %}
+ethernet_1_3:
+{% for host in groups['all'] %}
+{% if 'leaf3' in host or 'Spine' in host %}
+  {{ host }}: "{{ hostvars[host].eth3_ip }}"
+{% endif %}
+{% endfor %}
+ethernet_1_4:
+{% for host in groups['all'] %}
+{% if 'leaf2' in host %}
+  {{ host }}: "{{ hostvars[host].eth4_ip }}"
+{% endif %}
+{% endfor %}
+ethernet_1_5:
+{% for host in groups['all'] %}
+{% if 'leaf1' in host %}
+  {{ host }}: "{{ hostvars[host].eth5_ip }}"
+{% endif %}
+{% endfor %}

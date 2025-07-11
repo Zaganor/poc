@@ -1,0 +1,28 @@
+                                                                                                                                                                                                                                                                                                                                           
+INTERFACE1:
+  clab-teste-Spine1: "ethernet-1/1"
+  clab-teste-leaf1: "ethernet-1/1"
+  clab-teste-leaf2: "ethernet-1/1"
+  clab-teste-Spine2: "ethernet-1/1"
+  clab-teste-leaf3: "ethernet-1/1"
+
+INTERFACE2:
+  clab-teste-Spine1: "ethernet-1/2"
+  clab-teste-leaf1: "ethernet-1/2"
+  clab-teste-Spine2: "ethernet-1/2"
+  clab-teste-leaf2: "ethernet-1/2"
+  clab-teste-leaf3: "ethernet-1/2"
+
+INTERFACE3:
+  clab-teste-Spine1: "ethernet-1/3"
+  clab-teste-Spine2: "ethernet-1/3"
+
+
+interfaces_count:
+  clab-teste-Spine1: 3
+  clab-teste-leaf1: 2
+  clab-teste-leaf2: 2
+  clab-teste-Spine2: 3
+  clab-teste-leaf3: 2
+
+

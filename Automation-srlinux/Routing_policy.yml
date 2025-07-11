@@ -1,0 +1,63 @@
+- name: Routing policy Config
+  hosts: all
+  gather_facts: false
+
+  vars_files:
+    - "Router_P.yml"
+    - "netbox.yml"
+  tasks:
+
+    - name: 3 - Get IP Addresses
+      uri:
+        url: "{{ netbox_url }}api/ipam/ip-addresses/?device={{inventory_hostname}}&tag=leetc"
+        method: GET
+        return_content: yes
+        headers:
+          accept: "application/json"
+          Authorization: "Token {{ netbox_token }}"
+      register: ip_addresses
+
+    - name: Extract IP of specific interface
+      set_fact:
+        eth1_ip: >-
+          {{
+            ip_addresses.json.results
+            | selectattr('assigned_object', 'defined')
+            | selectattr('assigned_object.name', 'equalto', 'system0.0')
+            | map(attribute='address')
+            | list
+            | first
+            | default('')
+          }}
+
+    - name: Generate vars file from extracted Router_ID
+      delegate_to: localhost
+      template:
+        src:  "RP.j2"
+        dest: "Router_P.yml"
+
+    - name: Prefix set
+      nokia.srlinux.config:
+        update:
+          - path: /routing-policy
+            value:
+              prefix-set:
+                name: "system_ip"
+                prefix: 
+                  ip-prefix: "{{ system[inventory_hostname] }}"
+                  mask-length-range: "exact"
+
+    - name: Routing policy
+      nokia.srlinux.config:
+        update:
+          - path: /routing-policy
+            value:
+              policy:
+                name: "system_ip"
+                statement:
+                  name: 10
+                  match:
+                    prefix-set: "system_ip"
+                  action:
+                    policy-result: accept
+

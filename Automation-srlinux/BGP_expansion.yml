@@ -1,0 +1,65 @@
+- name: Underlay Config
+  hosts: all
+  gather_facts: false
+
+  vars_files:
+    - "vars_asn_expansion.yml"
+    - "netbox.yml"
+
+  tasks:
+
+    - name: 3 - Get IP Addresses
+      uri:
+        url: "{{ netbox_url }}api/ipam/vrfs/"
+        method: GET
+        return_content: yes
+        headers:
+          accept: "application/json"
+          Authorization: "Token {{ netbox_token }}"
+      register: vfrs
+
+    - name: Extract IP of specific interface
+      set_fact:
+        vrf_name: >-
+          {{
+            vfrs.json.results
+            | selectattr('name', 'equalto', 'default')
+            | map(attribute='name')
+            | list
+            | first
+            | default('')
+          }}
+
+    - template:
+        src: ASN_ID.j2
+        dest: vars_asn_expansion.yml      
+
+    - name: Define Bgp AS
+      nokia.srlinux.config:
+        update:
+          - path: /network-instance[name={{ VRF.name }}]/protocols/bgp
+            value:
+              autonomous-system: "{{ AS[inventory_hostname] }}"
+              router-id: "{{ ID[inventory_hostname] }}"
+              admin-state: enable
+              ebgp-default-policy:
+                export-reject-all: "false"
+                import-reject-all: "false"
+              afi-safi:
+                - afi-safi-name: ipv4-unicast
+                  admin-state: enable
+                - afi-safi-name: ipv6-unicast
+                  admin-state: enable
+              group:
+                group-name: underlay
+                admin-state: enable
+                export-policy: 
+                  - "system_ip"
+
+    - name: Define Bgp AS
+      nokia.srlinux.config:
+        update:
+          - path: /network-instance[name={{ VRF.name }}]
+            value:
+              ip-forwarding:
+                receive-ipv4-check: "false"

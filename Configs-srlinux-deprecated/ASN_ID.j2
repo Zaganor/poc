@@ -1,0 +1,8 @@
+AS:
+{% for host in groups['all'] %}
+  {{ host }}: "{{ hostvars[host]['custom_fields']['DEVICE_ASN'] }}"
+{% endfor %}
+ID:
+{% for host in groups['all'] %}
+  {{ host }}: "{{ hostvars[host]['custom_fields']['Router_ID'] }}"
+{% endfor %}

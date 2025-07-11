@@ -1,0 +1,67 @@
+- name: Router Refletor Config
+  hosts: device_roles_spine
+  gather_facts: false
+
+  vars_files:
+    - "vars_RR.yml"
+    - "overlay_asn_spine.yml"
+    - "netbox.yml"
+
+  tasks:
+    - template:
+        src: RR.j2
+        dest: vars_RR.yml
+
+    - name: 3 - Get ASN Addresses
+      uri:
+        url: "{{ netbox_url }}api/ipam/asns/?device={{inventory_hostname}}&tag=leetc"
+        method: GET
+        return_content: yes
+        headers:
+          accept: "application/json"
+          Authorization: "Token {{ netbox_token }}"
+      register: asn_addresses
+
+    - name: Extract IP of specific interface
+      set_fact:
+        overlay_asn: >-
+          {{
+            asn_addresses.json.results
+            | selectattr('description', 'equalto', 'ASN do overlay')
+            | map(attribute='asn')
+            | list
+            | first
+            | default ('')
+          }}
+
+    - name: Generate vars file from extracted ASNs
+      delegate_to: localhost
+      template:
+        src: OVERLAY_ASN_Spine.j2
+        dest: "overlay_asn_spine.yml"
+
+    - name: Define RR
+      nokia.srlinux.config:
+        update:
+          - path: /network-instance[name=default]
+            value:
+              type: "default"
+              description: "Done using ansible"
+              protocols:
+                bgp:
+                  group:
+                    - group-name: evpnRR
+                      admin-state: enable
+                      peer-as: "{{ AS[inventory_hostname] }}"
+                      local-as:
+                        as-number: "{{ AS[inventory_hostname] }}"
+                      afi-safi:
+                        - afi-safi-name: evpn
+                          admin-state: enable
+                        - afi-safi-name: ipv4-unicast
+                          admin-state: disable
+                        - afi-safi-name: ipv6-unicast
+                          admin-state: enable
+                      route-reflector:
+                        client: true
+                        cluster-id :  "{{ ID[inventory_hostname] }}"

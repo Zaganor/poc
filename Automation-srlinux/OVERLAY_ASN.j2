@@ -1,0 +1,9 @@
+AS:
+{% for host in groups['all'] if 'leaf' in host %}
+  {{ host }}: "{{ hostvars[host].overlay_asn }}"
+{% endfor %}
+
+ID:
+{% for host in groups['all'] %}
+  {{ host }}: "{{ hostvars[host].custom_fields.Router_ID }}"
+{% endfor %}

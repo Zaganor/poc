@@ -1,0 +1,5 @@
+system:
+  clab-poc-leetc-leaf1: "172.20.20.3/24"
+  clab-poc-leetc-leaf2: "172.20.20.17/24"
+  clab-poc-leetc-Spine1: "172.20.20.15/24"
+  clab-poc-leetc-Spine2: "172.20.20.8/24"

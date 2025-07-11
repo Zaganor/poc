@@ -1,0 +1,24 @@
+- name: Vrf association
+  hosts: localhost
+  gather_facts: false
+
+  vars_files:
+    - "netbox.yml"
+
+  tasks:
+    
+    - name: Atualizar interface e associar VRF
+      netbox.netbox.netbox_device_interface:
+        netbox_url: "{{ netbox_url }}"
+        netbox_token: "{{ netbox_token }}"
+        data:
+          device: "{{ item.name }}"
+          name: "{{ item.inter }}"
+          vrf: "{{ item.vrf }}"
+        state: present
+      loop:
+        - {name: "clab-teste-leaf1", inter: "ethernet-1/3", vrf: "MAC-VRF-10"}
+        - {name: "clab-teste-leaf2", inter: "ethernet-1/3", vrf: "MAC-VRF-10"}
+        - {name: "clab-teste-leaf3", inter: "ethernet-1/3", vrf: "MAC-VRF-10"}
+        - {name: "clab-teste-leaf1", inter: "ethernet-1/4", vrf: "MAC-VRF-20"}
+

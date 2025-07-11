@@ -1,0 +1,28 @@
+- name: Create Cables
+  hosts: localhost
+  gather_facts: false
+
+  tasks:
+    - name: Create Cables
+      set_fact:
+        devices:
+          - { name: "clab-poc-leetc-Spine1", interface: "ethernet-1/1", name_b: "clab-poc-leetc-leaf1", interface_b: "ethernet-1/1" }
+          - { name: "clab-poc-leetc-Spine1", interface: "ethernet-1/2", name_b: "clab-poc-leetc-leaf2", interface_b: "ethernet-1/1" }
+          - { name: "clab-poc-leetc-Spine2", interface: "ethernet-1/1", name_b: "clab-poc-leetc-leaf1", interface_b: "ethernet-1/2" }
+          - { name: "clab-poc-leetc-Spine2", interface: "ethernet-1/2", name_b: "clab-poc-leetc-leaf2", interface_b: "ethernet-1/2" }
+
+    - name: Create connections
+      netbox.netbox.netbox_cable:
+        netbox_url: "https://mlyy7367.cloud.netboxapp.com/"
+        netbox_token: "0c11d890ef4c6df4b11ca633a40f7fff4a6bb394"
+        data:
+          termination_a_type: dcim.interface
+          termination_a:
+            device: "{{ item.name }}"
+            name: "{{ item. interface }}"
+          termination_b_type: dcim.interface
+          termination_b:
+            device: "{{ item.name_b }}"
+            name: "{{ item. interface_b }}"
+        state: present
+      loop: "{{ devices }}"

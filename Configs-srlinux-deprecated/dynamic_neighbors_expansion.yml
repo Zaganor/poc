@@ -1,0 +1,84 @@
+- name: Underlay Config
+  hosts: all
+  gather_facts: false
+
+  vars_files:
+    - "vars_dynamic_expansion.yml"
+    - "netbox.yml"
+
+  tasks:
+    - name: 3 - Get interfaces
+      uri:
+        url: "{{ netbox_url }}api/ipam/ip-addresses/?device={{inventory_hostname}}&tag=leetc"
+        method: GET
+        return_content: yes
+        headers:
+          accept: "application/json"
+          Authorization: "Token {{ netbox_token }}"
+      register: ip_addresses
+    - name: Extract interface names
+      set_fact:
+        interfaces_full: >-
+          {{
+            ip_addresses.json.results
+            | selectattr('assigned_object', 'defined')
+            | map(attribute='assigned_object.name')
+            | list
+          }}
+
+    - name: Generate vars file from extracted interfaces
+      delegate_to: localhost
+      template:
+        src: dy_ngh_expansion.j2
+        dest: "vars_dynamic_expansion.yml"
+
+    - name: Set peer AS list
+      set_fact:
+        peer_as_list: >-
+          [
+            {{ AS[inventory_hostname] }}
+            {% if inventory_hostname in AS1 %}, {{ AS1[inventory_hostname] }}{% endif %}
+            {% if inventory_hostname in AS2 %}, {{ AS2[inventory_hostname] }}{% endif %}
+          ]
+
+    - name: Configure BGP Dynamic Neighbors
+      nokia.srlinux.config:
+        update:
+          - path: /network-instance[name=default]
+            value:
+              protocols:
+                bgp:
+                  dynamic-neighbors:
+                    interface:
+                      interface-name: "{{ INTERFACE1[inventory_hostname] }}"
+                      peer-group: "underlay"
+                      allowed-peer-as: "{{peer_as_list}}"
+
+    - name: Configure BGP Dynamic Neighbors
+      nokia.srlinux.config:
+        update:
+          - path: /network-instance[name=default]
+            value:
+              protocols:
+                bgp:
+                  dynamic-neighbors:
+                    interface:
+                      interface-name: "{{ INTERFACE2[inventory_hostname] }}"
+                      peer-group: "underlay"
+                      allowed-peer-as: "{{peer_as_list}}"
+
+    - name: Configure BGP Dynamic Neighbors
+      when: inventory_hostname in ['clab-teste-Spine1', 'clab-teste-Spine2']
+      nokia.srlinux.config:
+        update:
+          - path: /network-instance[name=default]
+            value:
+              protocols:
+                bgp:
+                  dynamic-neighbors:
+                    interface:
+                      interface-name: "{{ INTERFACE3[inventory_hostname] }}"
+                      peer-group: "underlay"
+                      allowed-peer-as: "{{peer_as_list}}"
+
+

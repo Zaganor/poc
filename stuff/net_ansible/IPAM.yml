@@ -1,0 +1,42 @@
+- name: Create VRF
+  hosts: localhost
+  gather_facts: false
+
+  tasks:
+    - name: Vreate VRFs
+      set_fact:
+        VRF:
+          - name: default
+          - name: MAC-VRF
+        Address:
+          - address: 172.20.20.12/24
+            name: clab-poc-leetc-Spine1
+          - address: 172.20.20.13/24
+            name: clab-poc-leetc-Spine2
+          - address: 172.20.20.14/24
+            name: clab-poc-leetc-leaf1
+          - address: 172.20.20.15/24
+            name: clab-poc-leetc-leaf2
+
+    - name: Create VRF
+      netbox.netbox.netbox_vrf:
+        netbox_url: "https://mlyy7367.cloud.netboxapp.com/"
+        netbox_token: "0c11d890ef4c6df4b11ca633a40f7fff4a6bb394"
+        data:
+          name: "{{ item.name}}"
+        state: present
+      loop: "{{ VRF }}"
+
+    - name: Create IP address
+      netbox.netbox.netbox_ip_address:
+        netbox_url: "https://mlyy7367.cloud.netboxapp.com/"
+        netbox_token: "0c11d890ef4c6df4b11ca633a40f7fff4a6bb394"
+        data:
+          address: "{{ item.address}}"
+          vrf: default
+          role: Loopback
+          assigned_object:
+            name: system0.0
+            device: "{{ item.name }}"
+        state: present
+      loop: "{{ Address }}"

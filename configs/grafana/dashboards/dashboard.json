@@ -1,0 +1,130 @@
+{
+  "title": "Simple Telemetry Dashboard",
+  "timezone": "browser",
+  "refresh": "10s",
+  "time": { "from": "now-5m", "to": "now" },
+  "templating": {
+    "list": [
+      {
+        "name": "NE",
+        "type": "query",
+        "datasource": {
+          "type": "prometheus"
+        },
+        "query": "label_values(source)",
+        "refresh": 1
+      }
+    ]
+  },
+  "panels": [
+    {
+      "type": "text",
+      "title": "Topologia da Rede",
+      "gridPos": { "x": 0, "y": 0, "w": 24, "h": 8 },
+      "options": {
+        "content": "<img src='http://localhost:8000/configs/grafana/flow-panels/topology.svg' style='width:100%'/>",
+        "mode": "html"
+      }
+    },
+    {
+      "type": "timeseries",
+      "title": "Interface Traffic (bps)",
+      "gridPos": { "x": 0, "y": 8, "w": 12, "h": 8 },
+      "datasource": {
+        "type": "prometheus"
+      },
+      "targets": [
+        { "expr": "interface_traffic_rate_in_bps{source=\"$NE\"}", "refId": "A" },
+        { "expr": "interface_traffic_rate_out_bps{source=\"$NE\"}", "refId": "B" }
+      ]
+    },
+    {
+      "type": "timeseries",
+      "title": "Interface Errors",
+      "gridPos": { "x": 12, "y": 8, "w": 12, "h": 8 },
+      "datasource": {
+        "type": "prometheus"
+      },
+      "targets": [
+        { "expr": "interface_statistics_in_error_packets{source=\"$NE\"}", "refId": "A" },
+        { "expr": "interface_statistics_out_error_packets{source=\"$NE\"}", "refId": "B" },
+        { "expr": "interface_statistics_in_discarded_packets{source=\"$NE\"}", "refId": "C" },
+        { "expr": "interface_statistics_out_discarded_packets{source=\"$NE\"}", "refId": "D" }
+      ]
+    },
+    {
+      "type": "timeseries",
+      "title": "CPU & Mem Utilization",
+      "gridPos": { "x": 0, "y": 16, "w": 12, "h": 8 },
+      "datasource": {
+        "type": "prometheus"
+      },
+      "targets": [
+        { "expr": "platform_control_cpu_total_instant{source=\"$NE\"}", "refId": "A" },
+        { "expr": "platform_control_memory_utilization{source=\"$NE\"}", "refId": "B" }
+      ]
+    },
+    {
+      "type": "gauge",
+      "title": "BGP Peers",
+      "gridPos": { "x": 12, "y": 16, "w": 6, "h": 6 },
+      "datasource": {
+        "type": "prometheus"
+      },
+      "targets": [
+        { "expr": "network_instance_protocols_bgp_statistics_up_peers{source=\"$NE\"}", "refId": "A" },
+        { "expr": "network_instance_protocols_bgp_statistics_total_peers{source=\"$NE\"}", "refId": "B" }
+      ]
+    },
+  {
+    "type": "stat",
+    "title": "Interface Operational State",
+    "gridPos": { "x": 18, "y": 16, "w": 6, "h": 6 },
+    "datasource": {
+      "type": "prometheus"
+    },
+    "targets": [
+      {
+        "expr": "interface_oper_state{source=\"$NE\"} == 1",
+        "refId": "A"
+      }
+    ],
+    "fieldConfig": {
+      "defaults": {
+        "mappings": [
+          {
+            "type": "value",
+            "options": {
+              "1": {
+                "text": "up"
+              },
+              "0": {
+                "text": "down"
+              }
+            }
+          }
+        ],
+        "color": {
+          "mode": "thresholds"
+        },
+        "thresholds": {
+          "mode": "absolute",
+          "steps": [
+            {
+              "color": "red",
+              "value": null
+            },
+            {
+              "color": "green",
+              "value": 1
+            }
+          ]
+        }
+      },
+      "overrides": []
+    }
+  }
+
+  ]
+}
+

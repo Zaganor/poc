@@ -1,0 +1,23 @@
+- name: Create interface
+  hosts: localhost
+  gather_facts: false
+
+  tasks:
+    - name: Create interface system0
+      set_fact:
+        devices:
+         - name: clab-poc-leetc-Spine1
+         - name: clab-poc-leetc-Spine2
+         - name: clab-poc-leetc-leaf1
+         - name: clab-poc-leetc-leaf2
+
+    - name: Create interface
+      netbox.netbox.netbox_device_interface:
+        netbox_url: "https://mlyy7367.cloud.netboxapp.com/"
+        netbox_token: "0c11d890ef4c6df4b11ca633a40f7fff4a6bb394"
+        data:
+          device: "{{ item.name}}"
+          name: system0.0
+          type: Virtual
+        state: present
+      loop: "{{ devices }}"

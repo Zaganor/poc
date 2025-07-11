@@ -1,0 +1,20 @@
+ethernet_1_1:
+  clab-teste-leaf1: "100.21.21.2/30"
+  clab-teste-leaf2: "100.21.22.2/30"
+  clab-teste-leaf3: "100.21.25.2/30"
+  clab-teste-Spine1: "100.21.21.1/30"
+  clab-teste-Spine2: "100.21.23.1/30"
+ethernet_1_2:
+  clab-teste-leaf1: "100.21.23.2/30" 
+  clab-teste-leaf2: "100.21.24.2/30" 
+  clab-teste-leaf3: "100.21.26.2/30" 
+  clab-teste-Spine1: "100.21.22.1/30" 
+  clab-teste-Spine2: "100.21.24.1/30" 
+ethernet_1_3:
+  clab-teste-leaf3: "100.21.27.2/30"
+  clab-teste-Spine1: "100.21.25.1/30"
+  clab-teste-Spine2: "100.21.26.1/30"
+ethernet_1_4:
+  clab-teste-leaf2: "100.21.29.2/30"
+ethernet_1_5:
+  clab-teste-leaf1: "100.21.28.2/30"

@@ -1,0 +1,4 @@
+AS:
+{% for host in groups['all'] if 'leaf' in host %}
+  {{ host }}: "{{ hostvars[host].overlay_asn }}"
+{% endfor %}

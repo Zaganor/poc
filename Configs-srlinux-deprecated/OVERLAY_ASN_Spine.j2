@@ -1,0 +1,4 @@
+AS:
+{% for host in groups['all'] if 'Spine' in host %}
+  {{ host }}: "{{ hostvars[inventory_hostname].overlay_asn }}"
+{% endfor %}

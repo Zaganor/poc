@@ -1,0 +1,56 @@
+- name: Add interfaces
+  hosts: localhost
+  gather_facts: false
+
+  vars_files:
+    - "netbox.yml"  
+
+  tasks:  
+
+    - name: Get devices with tag 'leetc'
+      uri:
+        url: "{{ netbox_url }}/api/dcim/devices/?tag=leetc"
+        method: GET
+        return_content: yes
+        headers:
+          accept: "application/json"
+          Authorization: "Token {{ netbox_token }}"
+      register: tagged_devices
+
+    - name: Extract list of device names with tag 'leetc'
+      set_fact:
+        leetc_device_names: "{{ tagged_devices.json.results | map(attribute='name') | list }}"
+
+    - name: Get all cable terminations
+      uri:
+        url: "{{ netbox_url }}/api/dcim/cable-terminations/?limit=1000"
+        method: GET
+        return_content: yes
+        headers:
+          accept: "application/json"
+          Authorization: "Token {{ netbox_token }}"
+      register: all_terminations
+
+    - name: Filter terminations by devices with tag 'leetc'
+      set_fact:
+        nb_interfaces:
+          json:
+            results: >-
+              {{
+                all_terminations.json.results | selectattr(
+                  "termination.device.name", "in", leetc_device_names
+                ) | list
+              }}
+
+    - name: Render template with filtered interfaces
+      template:
+        src: interfaces_by_host.j2
+        dest: vars_interfaces.yml
+
+
+
+
+
+
+
+

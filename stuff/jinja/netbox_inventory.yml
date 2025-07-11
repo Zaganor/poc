@@ -1,0 +1,9 @@
+---
+plugin: netbox.netbox.nb_inventory
+api_endpoint: https://mlyy7367.cloud.netboxapp.com/
+token: 0c11d890ef4c6df4b11ca633a40f7fff4a6bb394
+validate_certs: false
+config_context: false
+query_filters:
+group_by:
+  - device_roles

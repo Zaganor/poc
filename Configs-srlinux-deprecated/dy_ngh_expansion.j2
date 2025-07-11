@@ -1,0 +1,56 @@
+{# - Primeiro obtemos os ASNs de um leaf e de um spine como referência #}
+{% set leaf_asn = hostvars['clab-teste-leaf1']['custom_fields']['DEVICE_ASN'] %}
+{% set spine_asn = hostvars['clab-teste-Spine1']['custom_fields']['DEVICE_ASN'] %}
+{% set leaf2_asn = hostvars['clab-teste-leaf2']['custom_fields']['DEVICE_ASN'] %}
+{% set leaf3_asn = hostvars['clab-teste-leaf3']['custom_fields']['DEVICE_ASN'] %}
+
+AS:
+{% for host in groups['all'] %}
+{% if 'Spine' in host %}
+  {{ host }}: "{{ leaf_asn }}"
+{% elif 'leaf' in host %}
+  {{ host }}: "{{ spine_asn }}"
+{% else %}
+  {{ host }}: "{{ hostvars[host]['custom_fields']['DEVICE_ASN'] }}"
+{% endif %}
+{% endfor %}
+
+AS1:
+{% for host in groups['all'] %}
+{% if 'Spine' in host %}
+  {{ host }}: "{{ leaf2_asn }}"
+{% endif %}
+{% endfor %}
+
+AS2:
+{% for host in groups['all'] %}
+{% if 'Spine' in host %}
+  {{ host }}: "{{ leaf3_asn }}"
+{% endif %}
+{% endfor %}
+
+INTERFACE1:
+{% for host in groups['all'] %}
+  {{ host }}: "{{ hostvars[host].interfaces_full
+                  | select('equalto', 'ethernet-1/1')
+                  | list
+                  | first }}.0"
+{% endfor %}
+
+INTERFACE2:
+{% for host in groups['all'] %}
+  {{ host }}: "{{ hostvars[host].interfaces_full
+                  | select('equalto', 'ethernet-1/2')
+                  | list
+                  | first }}.0"
+{% endfor %}
+
+INTERFACE3:
+{% for host in groups['all'] %}
+{% if 'Spine' in host %}
+  {{ host }}: "{{ hostvars[host].interfaces_full
+                  | select('equalto', 'ethernet-1/3')
+                  | list
+                  | first }}.0"
+{% endif %}
+{% endfor %}
