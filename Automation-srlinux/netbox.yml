@@ -1,5 +1,3 @@
-netbox_token: "22049c3856dfc53015c1595ac48eadb8713fbda7"
-#netbox_url: "http://pfc-ng.fil.isel.pt:8001/"
+netbox_token: "Your netbox token"
+netbox_url: "Your netbox url"
 
-netbox_url: "https://gnja9596.cloud.netboxapp.com/"
-#netbox_token: "4bfbc38043f616cc419b19e729c5a04dc604c4c8"
