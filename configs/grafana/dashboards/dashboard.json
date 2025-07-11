@@ -18,15 +18,6 @@
   },
   "panels": [
     {
-      "type": "text",
-      "title": "Topologia da Rede",
-      "gridPos": { "x": 0, "y": 0, "w": 24, "h": 8 },
-      "options": {
-        "content": "<img src='http://localhost:8000/configs/grafana/flow-panels/topology.svg' style='width:100%'/>",
-        "mode": "html"
-      }
-    },
-    {
       "type": "timeseries",
       "title": "Interface Traffic (bps)",
       "gridPos": { "x": 0, "y": 8, "w": 12, "h": 8 },
