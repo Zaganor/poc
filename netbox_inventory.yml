@@ -2,8 +2,6 @@
 plugin: netbox.netbox.nb_inventory
 api_endpoint: "<Your netbox url>"
 token: "Your netbox API token"
-#api_endpoint: "https://kass5187.cloud.netboxapp.com/"
-#token: "4bfbc38043f616cc419b19e729c5a04dc604c4c8"
 validate_certs: false
 config_context: false
 query_filters:
