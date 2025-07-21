@@ -132,6 +132,7 @@ topology:
     # TELEMETRY STACK
 
     # GNMIC
+    
     gnmic:
       kind: linux
       mgmt-ipv4: 172.20.20.41
@@ -139,6 +140,9 @@ topology:
       binds:
         - configs/gnmic/gnmic-config.yml:/gnmic-config.yml:ro
       cmd: --config /gnmic-config.yml --log subscribe
+      # To expose gnmi metrics via localhost:9273/metrics
+      ports:
+        - 9273:9273
       group: "10" # group 10 is assigned to the nodes of a telemetry stack
       labels:
         graph-posX: "615"
