@@ -20,7 +20,7 @@ Para o inicio da topologia temos o ficheiro [`main.yml`](/Populate/main.yml) que
 
 A configuração da topologia no containerLab é feita a partir das informações fornecidas pelo Netbox.
 
-O acesso do Netbox é feito a partir de playbooks Ansible que acessam ao API da Netbox retirando a informação pretinente, que é usada em conjunto com templates Jinja2 para a criação dos vars_files que contem toda a infomraçao necessaria para a configuração dos dispositivos SR Linux usados na na nossa [`topologia.clab.yml`](topologia.clab.yml).
+O acesso do Netbox é feito a partir de playbooks Ansible que acessam ao API da Netbox retirando a informação pretinente, que é usada em conjunto com templates Jinja2 para a criação dos vars_files que contem toda a informação necessaria para a configuração dos dispositivos SR Linux usados na na nossa [`topologia.clab.yml`](topologia.clab.yml).
 
 Os playbooks foram feitos de forma dinamica, ou seja, qualquer alteração no Netbox irá alterar os vars_files.
 
