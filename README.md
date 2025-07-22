@@ -14,7 +14,7 @@ A configuração é dividida em duas partes: Configração do Netbox com os equi
 
 A configuração do netbox é feita a partir dos playbooks Ansible disponiveis na diretoria [`Populate`](/Populate). Este playbooks tem de ser alterados manualmente para a a introdução de novos dados, caso por exemplo seja necessario acrescentar um novo router a topologia será necessario ir ao ficheiro device.yml, adicionar esse router novo com as suas informações pretendidas e correr o playbook device.yml.
 
-Para o inicio da topologia temos o ficheiro [`main.yml`](main.yml) que faz a população do netbox com 5 equipamentos e as suas informações necessarias.
+Para o inicio da topologia temos o ficheiro [`main.yml`](/Populate/main.yml) que faz a população do netbox com 5 equipamentos e as suas informações necessarias.
 
 ### Configuração dos Dispositivos no containerLab
 
@@ -24,7 +24,7 @@ O acesso do Netbox é feito a partir de playbooks Ansible que acessam ao API da 
 
 Os playbooks foram feitos de forma dinamica, ou seja, qualquer alteração no Netbox irá alterar os vars_files.
 
-Para fazer a configuração é usado apenas o ficheiro [`main.yml`](main.yml) presente na diretoria [`Automation-srlinux`](/Automation-srlinux).
+Para fazer a configuração é usado apenas o ficheiro [`main.yml`](/Automation-srlinux/main.yml) presente na diretoria [`Automation-srlinux`](/Automation-srlinux).
 
 ## Organização por fases
 
