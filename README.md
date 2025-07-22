@@ -10,11 +10,14 @@ Com foco na automação, a solução recorre ao Ansible, scripts de Python e tem
 
 A configuração é dividida em duas partes: Configração do Netbox com os equipamentos e outras informações usadas na rede(Ex.: ASNs, VRFs, etc) e a configuração dos dispositivos do containerLab.
 
+Primeiramente, para arrancar com a topologia e os serviços a esta associados é necessario correr o comando ```sudo clab deploy -t topologia.clab.yml```
+
 ###  Configração do Netbox
 
 A configuração do netbox é feita a partir dos playbooks Ansible disponiveis na diretoria [`Populate`](/Populate). Este playbooks tem de ser alterados manualmente para a a introdução de novos dados, caso por exemplo seja necessario acrescentar um novo router a topologia será necessario ir ao ficheiro device.yml, adicionar esse router novo com as suas informações pretendidas e correr o playbook [`devices.yml`](/Populate/devices.yml).
 
 Para o inicio da topologia temos o ficheiro [`main.yml`](/Populate/main.yml) que faz a população do netbox com 5 equipamentos e as suas informações necessarias.
+Este ficheiro é executado através do comando ```sudo ansible-playbook -i netbox_inventory.yml -c ansible.netcommon.httpapi -e "ansible_network_os=nokia.srlinux.srlinux" -e "ansible_user=admin" -e "ansible_password=NokiaSrl1!" main.yml```.
 
 ### Configuração dos Dispositivos no containerLab
 
@@ -25,6 +28,7 @@ O acesso do Netbox é feito a partir de playbooks Ansible que acessam ao API da 
 Os playbooks foram feitos de forma dinamica, ou seja, qualquer alteração no Netbox irá alterar os vars_files.
 
 Para fazer a configuração é usado apenas o ficheiro [`main.yml`](/Automation-srlinux/main.yml) presente na diretoria [`Automation-srlinux`](/Automation-srlinux).
+Este ficheiro é executado tambem através do comando ```sudo ansible-playbook -i netbox_inventory.yml -c ansible.netcommon.httpapi -e "ansible_network_os=nokia.srlinux.srlinux" -e "ansible_user=admin" -e "ansible_password=NokiaSrl1!" main.yml```.
 
 ## Organização por fases
 
