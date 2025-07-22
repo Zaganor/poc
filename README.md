@@ -37,8 +37,8 @@ A monitorização da rede estará disponivel nos seguintes endereços:
 **Prometheus** : ```http://localhost:9090/targets?search=```
 
   Neste link, é possível visualizar os targets (alvos) que o Prometheus está a monitorizar e confirmar se estão ativos. A interface mostra, por exemplo, o endpoint ```http://gnmic:9273/metrics``` com o estado ```UP```, o que indica que o Prometheus está a recolher métricas com sucesso desse serviço.
- [ é fundamental seguir os passos a cima para um bom funcionamento dos _dashboards_ criados no grafana ]
-  Para consultar estas métricas pode-se consultar o link ```http://localhost:9273```
+ [ é fundamental seguir os passos a cima para um bom funcionamento dos _dashboards_ criados no grafana ].
+ Para consultar estas métricas pode-se consultar o link ```http://localhost:9273```
 
 **Grafana** : ```http://localhost:3000```
   É necessário fazer um login com as credenciais default do Grafana: ```admin / admin```.
