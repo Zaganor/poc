@@ -30,6 +30,20 @@ Os playbooks foram feitos de forma dinamica, ou seja, qualquer alteração no Ne
 Para fazer a configuração é usado apenas o ficheiro [`main.yml`](/Automation-srlinux/main.yml) presente na diretoria [`Automation-srlinux`](/Automation-srlinux).
 Este ficheiro é executado tambem através do comando ```sudo ansible-playbook -i netbox_inventory.yml -c ansible.netcommon.httpapi -e "ansible_network_os=nokia.srlinux.srlinux" -e "ansible_user=admin" -e "ansible_password=NokiaSrl1!" main.yml```.
 
+### Monitorização da Rede
+
+A monitorização da rede estará disponivel nos seguintes endereços:
+
+**Prometheus** : ```http://localhost:9090/targets?search=```
+
+  Neste link, é possível visualizar os targets (alvos) que o Prometheus está a monitorizar e confirmar se estão ativos. A interface mostra, por exemplo, o endpoint ```http://gnmic:9273/metrics``` com o estado ```UP```, o que indica que o Prometheus está a recolher métricas com sucesso desse serviço.
+ [ é fundamental seguir os passos a cima para um bom funcionamento dos _dashboards_ criados no grafana ]
+  Para consultar estas métricas pode-se consultar o link ```http://localhost:9273```
+
+**Grafana** : ```http://localhost:3000```
+  É necessário fazer um login com as credenciais default do Grafana: ```admin / admin```.
+  De seguida, os _dashboards_ podem ser encontrados na página ```http://localhost:3000/dashboards```
+
 ## Organização por fases
 
 ```mermaid
