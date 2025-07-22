@@ -12,7 +12,7 @@ A configuração é dividida em duas partes: Configração do Netbox com os equi
 
 ###  Configração do Netbox
 
-A configuração do netbox é feita a partir dos playbooks Ansible disponiveis na diretoria [`Populate`](/Populate). Este playbooks tem de ser alterados manualmente para a a introdução de novos dados, caso por exemplo seja necessario acrescentar um novo router a topologia será necessario ir ao ficheiro device.yml, adicionar esse router novo com as suas informações pretendidas e correr o playbook [`device.yml`](/Populate/device.yml).
+A configuração do netbox é feita a partir dos playbooks Ansible disponiveis na diretoria [`Populate`](/Populate). Este playbooks tem de ser alterados manualmente para a a introdução de novos dados, caso por exemplo seja necessario acrescentar um novo router a topologia será necessario ir ao ficheiro device.yml, adicionar esse router novo com as suas informações pretendidas e correr o playbook [`devices.yml`](/Populate/devices.yml).
 
 Para o inicio da topologia temos o ficheiro [`main.yml`](/Populate/main.yml) que faz a população do netbox com 5 equipamentos e as suas informações necessarias.
 
