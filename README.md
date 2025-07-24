@@ -1,5 +1,7 @@
 # Ambiente de Datacenter e automação de tarefas
 
+Nota: Este Projeto fornece apenas como serviço conectividade entre Hosts, através do uso de EPVN-VXLANs. Foram usados MAC-VRFS estando excluido o uso de IP-VRFs e IRBs.
+
 Este projeto propõe a implementação de uma rede de data center baseada na arquitetura CLOS (Spine-Leaf), utilizando tecnologias como EVPN-VXLAN para segmentação de redes virtuais sobre uma infraestrutura L3.
 
 Com foco na automação, a solução recorre ao Ansible, scripts de Python e templates Jinja2 para a orquestração de configurações e ao NetBox como fonte central de informação da infraestrutura de rede. Recorre tambem às ferramentas Prometheus e Grafana para monotorização da rede.
