@@ -6,7 +6,7 @@ Este projeto propõe a implementação de uma rede de data center baseada na arq
 
 Com foco na automação, a solução recorre ao Ansible, scripts de Python e templates Jinja2 para a orquestração de configurações e ao NetBox como fonte central de informação da infraestrutura de rede. Recorre tambem às ferramentas Prometheus e Grafana para monotorização da rede.
 
-<img width="520" height="471" alt="Diagrama sem nome drawio" src="https://github.com/user-attachments/assets/f0f4e9ee-3965-4e8f-9079-137fd6fd3868" />
+<img width="2000" height="1031" alt="projeto-arch drawio" src="https://github.com/user-attachments/assets/fd65e6b2-bd25-4dc9-bd2b-92e5ef045b47" />
 
 ## Configuração
 
